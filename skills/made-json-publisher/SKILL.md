@@ -1,37 +1,41 @@
 ---
-name: apps-json-publisher
+name: made-json-publisher
 description: >
-  Use when maintaining an apps.json feed for a project or creator: add newly
-  shipped apps, update changed app metadata, preserve creator-declared claims,
+  Use when maintaining a made.json feed for a project or creator: add newly
+  shipped items, update changed metadata, preserve creator-declared claims,
   and validate the feed.
 ---
 
-# apps.json Publisher
+# made.json Publisher
 
-Use this skill when a user asks to publish, update, maintain, or validate an
-`apps.json` feed, or when a project change ships new creator-made software that
+Use this skill when a user asks to publish, update, maintain, or validate a
+`made.json` feed, or when a project change ships a creator-made artifact that
 should appear in the feed, including apps, Claude/Codex skills, CLIs, MCP
-servers, extensions, templates, or other installable/useful software.
+servers, prompts, workflows, agents, extensions, templates, or other useful
+software.
 
 ## Workflow
 
 1. Find the feed file.
-   - Prefer `./apps.json`.
-   - Also check site/public output paths such as `public/apps.json`,
-     `static/apps.json`, or `site/apps.json`.
-   - If no feed exists, create `apps.json` with `version: "1.0"` and `apps: []`.
+   - Prefer `./made.json`.
+   - Also check public output paths such as `public/made.json`,
+     `static/made.json`, or `site/made.json`.
+   - If no feed exists, create `made.json` with `version: "1.0"` and `items: []`.
    - Use the resolved feed path as `<feed-path>` in every validation and CLI
      command below.
 
-2. Identify the app entry.
+2. Identify the item entry.
    - Required: `name`, `url`.
    - Prefer a stable lowercase `id`.
+   - Include `kind` when it is clear: `app`, `tool`, `skill`, `prompt`,
+     `workflow`, `agent`, `template`, `mcp-server`, `cli`, `library`, or another
+     useful hint.
    - Include `description`, `tags`, `targets`, `source`, `prompt_log`,
      `replaces`, `vibe_coded`, and `forkable` when the project has evidence for
      them.
    - Treat `vibe_coded`, `forkable`, `source`, `prompt_log`, and `replaces` as
      creator-declared metadata, not endorsements.
-   - For Claude/Codex skills, CLIs, MCP servers, templates, and other
+   - For skills, CLIs, MCP servers, prompts, workflows, templates, and other
      installable artifacts, add or update the entry only when there is clear
      evidence of creator/workspace ownership, canonical URL or source, intended
      install/use target, and current status.
@@ -41,7 +45,7 @@ servers, extensions, templates, or other installable/useful software.
 
 3. Update timestamps.
    - Set feed-level `updated` when the file changes.
-   - Set app-level `updated` when adding or materially changing an app.
+   - Set item-level `updated` when adding or materially changing an item.
    - Use ISO 8601 date-time strings.
 
 4. Validate.
@@ -51,7 +55,7 @@ servers, extensions, templates, or other installable/useful software.
    - Fix schema errors before finishing.
 
 5. Report what changed.
-   - Mention the app id/name added or updated.
+   - Mention the item id/name added or updated.
    - Mention validation result.
    - If CORS/deployment headers are relevant, remind the user to serve
      `Access-Control-Allow-Origin: *`.
@@ -62,11 +66,12 @@ When the `appfeed` CLI is available, prefer:
 
 ```bash
 appfeed add <feed-path> \
-  --name "App Name" \
-  --url "https://example.com/app" \
+  --name "Item Name" \
+  --kind tool \
+  --url "https://example.com/item" \
   --description "One sentence." \
   --tags "utility,ai" \
-  --target "web|https://example.com/app|Open"
+  --target "web|https://example.com/item|Open"
 ```
 
 Use `--replace` when updating an existing entry with the same `id` or `url`.

@@ -1,11 +1,11 @@
 {
   "name": "@apps-json/cli",
   "version": "0.1.0",
-  "description": "Reference CLI for the apps.json standard. Validate and maintain apps.json feeds. Installs the 'appfeed' binary.",
-  "homepage": "https://apps-json.org",
+  "description": "Reference CLI for the made.json standard. Validate and maintain made.json feeds. Installs the 'appfeed' binary.",
+  "homepage": "https://made-json.org",
   "repository": {
     "type": "git",
-    "url": "https://github.com/itsbdell/apps-json.git",
+    "url": "https://github.com/itsbdell/made-json.git",
     "directory": "appfeed"
   },
   "license": "MIT",
@@ -27,7 +27,7 @@
     "test": "node --test test/"
   },
   "keywords": [
-    "apps.json",
+    "made.json",
     "feed",
     "validator",
     "vibe-coded",

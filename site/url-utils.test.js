@@ -13,19 +13,19 @@ test("normalizes local demo feeds against the current origin", () => {
   );
 });
 
-test("normalizes bare domains to the default apps.json path", () => {
-  assert.equal(normalizeFeedUrl("ada.example"), "https://ada.example/apps.json");
-  assert.equal(normalizeFeedUrl("https://ada.example"), "https://ada.example/apps.json");
+test("normalizes bare domains to the default made.json path", () => {
+  assert.equal(normalizeFeedUrl("ada.example"), "https://ada.example/made.json");
+  assert.equal(normalizeFeedUrl("https://ada.example"), "https://ada.example/made.json");
 });
 
 test("rejects protocol-relative local-looking input", () => {
-  assert.equal(normalizeFeedUrl("//evil.example/apps.json", "http://localhost:4173"), null);
+  assert.equal(normalizeFeedUrl("//evil.example/made.json", "http://localhost:4173"), null);
 });
 
-test("builds well-known fallback only for apps.json paths", () => {
+test("builds well-known fallback only for made.json paths", () => {
   assert.equal(
-    wellKnownFallback("https://ada.example/apps.json"),
-    "https://ada.example/.well-known/apps.json"
+    wellKnownFallback("https://ada.example/made.json"),
+    "https://ada.example/.well-known/made.json"
   );
   assert.equal(wellKnownFallback("https://ada.example/custom.json"), null);
 });

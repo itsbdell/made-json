@@ -2,9 +2,9 @@
 // Pure ES module — no DOM access, no Node-specific APIs. Runs in browsers
 // and in Node so the same code can be exercised by node --test.
 //
-// Validates the v1.0 apps.json hard contract:
-//   - top-level: version === "1.0", apps is an array
-//   - each app: name (non-empty string), url (parseable URL)
+// Validates the v1.0 made.json hard contract:
+//   - top-level: version === "1.0", items is an array
+//   - each item: name (non-empty string), url (parseable URL)
 //
 // Everything else is best-effort: optional fields produce warnings when
 // they look malformed, never errors. The spec philosophy is "be permissive
@@ -59,25 +59,28 @@ function validateAuthor(author, out, path) {
   }
 }
 
-function validateApp(app, out, path) {
-  if (app == null || typeof app !== "object" || Array.isArray(app)) {
-    pushErr(out, path, "app must be an object");
+function validateItem(item, out, path) {
+  if (item == null || typeof item !== "object" || Array.isArray(item)) {
+    pushErr(out, path, "item must be an object");
     return;
   }
-  if (typeof app.name !== "string" || app.name.length === 0) {
+  if (typeof item.name !== "string" || item.name.length === 0) {
     pushErr(out, `${path}/name`, "missing required property 'name' (non-empty string)");
   }
-  if (!isParseableUrl(app.url)) {
+  if (!isParseableUrl(item.url)) {
     pushErr(out, `${path}/url`, "missing or unparseable required property 'url'");
   }
-  if (app.id != null && typeof app.id !== "string") {
+  if (item.id != null && typeof item.id !== "string") {
     pushWarn(out, `${path}/id`, "id should be a string");
   }
-  if (app.updated != null && !isIsoDateLike(app.updated)) {
+  if (item.kind != null && typeof item.kind !== "string") {
+    pushWarn(out, `${path}/kind`, "kind should be a string");
+  }
+  if (item.updated != null && !isIsoDateLike(item.updated)) {
     pushWarn(out, `${path}/updated`, "updated should be ISO 8601");
   }
-  if (Array.isArray(app.targets)) {
-    app.targets.forEach((t, i) => {
+  if (Array.isArray(item.targets)) {
+    item.targets.forEach((t, i) => {
       const tp = `${path}/targets/${i}`;
       if (t == null || typeof t !== "object") {
         pushWarn(out, tp, "target should be an object with a 'kind'");
@@ -90,12 +93,12 @@ function validateApp(app, out, path) {
         pushWarn(out, `${tp}/url`, "target.url is not parseable");
       }
     });
-  } else if (app.targets != null) {
+  } else if (item.targets != null) {
     pushWarn(out, `${path}/targets`, "targets should be an array");
   }
-  if (app.author != null) validateAuthor(app.author, out, `${path}/author`);
+  if (item.author != null) validateAuthor(item.author, out, `${path}/author`);
   for (const f of ["prompt_log", "source", "replaces"]) {
-    if (app[f] != null && !isParseableUrl(app[f])) {
+    if (item[f] != null && !isParseableUrl(item[f])) {
       pushWarn(out, `${path}/${f}`, `${f} is not a parseable URL`);
     }
   }
@@ -118,10 +121,10 @@ export function validate(feed) {
     }
   }
 
-  if (!Array.isArray(feed.apps)) {
-    pushErr(out, "/apps", "missing required property 'apps' (array)");
+  if (!Array.isArray(feed.items)) {
+    pushErr(out, "/items", "missing required property 'items' (array)");
   } else {
-    feed.apps.forEach((app, i) => validateApp(app, out, `/apps/${i}`));
+    feed.items.forEach((item, i) => validateItem(item, out, `/items/${i}`));
   }
 
   if (feed.author != null) validateAuthor(feed.author, out, "/author");

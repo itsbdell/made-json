@@ -6,11 +6,11 @@ const directory = {
   feeds: [
     {
       id: "ada",
-      feed_url: "https://ada.example/apps.json",
+      feed_url: "https://ada.example/made.json",
       author: { name: "Ada" },
       curator_tags: ["demo"],
       status: "valid",
-      apps: [
+      items: [
         {
           id: "ada:notebook",
           name: "Notebook",
@@ -34,7 +34,7 @@ const directory = {
   ]
 };
 
-test("flattens feed apps with creator context", () => {
+test("flattens feed items with creator context", () => {
   const apps = flattenApps(directory);
   assert.equal(apps.length, 2);
   assert.equal(apps[0].creator, "Ada");
@@ -49,7 +49,7 @@ test("filters by text, tag, target kind, and trust summary", () => {
   assert.deepEqual(filterApps(apps, { trust: "claims present" }).map(app => app.name), ["Notebook"]);
 });
 
-test("collects filter options from apps", () => {
+test("collects filter options from items", () => {
   const options = collectOptions(flattenApps(directory));
   assert.deepEqual(options.targets, ["cli", "web"]);
   assert.ok(options.tags.includes("notes"));

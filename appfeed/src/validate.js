@@ -22,38 +22,66 @@ async function getValidator() {
 
 const FETCH_TIMEOUT_MS = 15000;
 
+function wellKnownFallback(url) {
+  let u;
+  try {
+    u = new URL(url);
+  } catch {
+    return null;
+  }
+  if (!u.pathname.endsWith("/made.json")) return null;
+  u.pathname = u.pathname.replace(/\/made\.json$/, "/.well-known/made.json");
+  return u.toString();
+}
+
+async function fetchRemoteJson(url) {
+  let res;
+  try {
+    res = await fetch(url, {
+      headers: { "User-Agent": "appfeed/0.1 (+https://made-json.org)" },
+      redirect: "follow",
+      signal: AbortSignal.timeout(FETCH_TIMEOUT_MS)
+    });
+  } catch (e) {
+    const isTimeout = e?.name === "TimeoutError" || e?.name === "AbortError";
+    const err = new Error(
+      isTimeout
+        ? `Timed out after ${FETCH_TIMEOUT_MS}ms fetching ${url}`
+        : `Network error fetching ${url}: ${e.message}`
+    );
+    err.kind = isTimeout ? "timeout" : "network";
+    throw err;
+  }
+  if (!res.ok) {
+    const err = new Error(`HTTP ${res.status} ${res.statusText} from ${url}`);
+    err.kind = "http";
+    err.status = res.status;
+    throw err;
+  }
+  const text = await res.text();
+  try {
+    return JSON.parse(text);
+  } catch (e) {
+    const err = new Error(`Invalid JSON from ${url}: ${e.message}`);
+    err.kind = "parse";
+    throw err;
+  }
+}
+
 async function load(urlOrPath) {
   if (/^https?:\/\//i.test(urlOrPath)) {
-    let res;
     try {
-      res = await fetch(urlOrPath, {
-        headers: { "User-Agent": "appfeed/0.1 (+https://apps-json.org)" },
-        redirect: "follow",
-        signal: AbortSignal.timeout(FETCH_TIMEOUT_MS)
-      });
+      return await fetchRemoteJson(urlOrPath);
     } catch (e) {
-      const isTimeout = e?.name === "TimeoutError" || e?.name === "AbortError";
-      const err = new Error(
-        isTimeout
-          ? `Timed out after ${FETCH_TIMEOUT_MS}ms fetching ${urlOrPath}`
-          : `Network error fetching ${urlOrPath}: ${e.message}`
-      );
-      err.kind = isTimeout ? "timeout" : "network";
-      throw err;
-    }
-    if (!res.ok) {
-      const err = new Error(`HTTP ${res.status} ${res.statusText} from ${urlOrPath}`);
-      err.kind = "http";
-      err.status = res.status;
-      throw err;
-    }
-    const text = await res.text();
-    try {
-      return JSON.parse(text);
-    } catch (e) {
-      const err = new Error(`Invalid JSON from ${urlOrPath}: ${e.message}`);
-      err.kind = "parse";
-      throw err;
+      const fallback = e.kind === "http" && e.status === 404 ? wellKnownFallback(urlOrPath) : null;
+      if (!fallback) throw e;
+
+      try {
+        return await fetchRemoteJson(fallback);
+      } catch (fallbackError) {
+        fallbackError.message = `${e.message} (also tried ${fallback}: ${fallbackError.kind === "http" ? `HTTP ${fallbackError.status}` : fallbackError.message})`;
+        throw fallbackError;
+      }
     }
   }
 
@@ -93,17 +121,17 @@ export async function validateCmd(urlOrPath, options = {}) {
   const ok = validator(data);
 
   if (ok) {
-    const appCount = Array.isArray(data.apps) ? data.apps.length : 0;
+    const itemCount = Array.isArray(data.items) ? data.items.length : 0;
     if (json) {
       console.log(JSON.stringify({
         ok: true,
-        appCount,
+        itemCount,
         feedVersion: data.version ?? null,
         updated: data.updated ?? null
       }));
     } else {
-      console.log(pc.green(`✔ apps.json v${data.version} — valid`));
-      console.log(`  ${appCount} app${appCount === 1 ? "" : "s"}`);
+      console.log(pc.green(`✔ made.json v${data.version} — valid`));
+      console.log(`  ${itemCount} item${itemCount === 1 ? "" : "s"}`);
       if (data.updated) console.log(`  feed updated ${data.updated}`);
     }
     return 0;
@@ -119,7 +147,7 @@ export async function validateCmd(urlOrPath, options = {}) {
   if (json) {
     console.log(JSON.stringify({ ok: false, kind: "schema", errors }));
   } else {
-    console.error(pc.red(`✖ apps.json — ${errors.length} error${errors.length === 1 ? "" : "s"}`));
+    console.error(pc.red(`✖ made.json — ${errors.length} error${errors.length === 1 ? "" : "s"}`));
     for (const err of errors) {
       const loc = err.path || "/";
       console.error(`  ${pc.dim(loc)}  ${err.message}`);

@@ -1,12 +1,12 @@
 // site/directory.js
-// Browser directory for the seeded apps.json network, plus pure helpers for tests.
+// Browser directory for the seeded made.json network, plus pure helpers for tests.
 
 import { renderTrustReport, safeHttpUrl, safeLocalOrHttpUrl } from "./trust.js?v=20260502-8";
 
 export function flattenApps(directory) {
   const rows = [];
   for (const feed of directory?.feeds || []) {
-    for (const app of feed.apps || []) {
+    for (const app of feed.items || []) {
       rows.push({
         ...app,
         creator: feed.author?.name || new URL(feed.feed_url).host,
@@ -82,18 +82,18 @@ function renderDirectory(apps, data) {
   const wrap = el("section", { class: "directory" });
   wrap.append(
     el("p", { class: "eyebrow", text: "Who's publishing?" }),
-    el("h2", { text: "A small blogroll of app feeds" }),
-    el("p", { class: "muted", text: `${apps.length} app${apps.length === 1 ? "" : "s"} from ${(data.feeds || []).length} opted-in feed${(data.feeds || []).length === 1 ? "" : "s"}. The list is a seed, not a gate.` })
+    el("h2", { text: "A small blogroll of made.json feeds" }),
+    el("p", { class: "muted", text: `${apps.length} item${apps.length === 1 ? "" : "s"} from ${(data.feeds || []).length} opted-in feed${(data.feeds || []).length === 1 ? "" : "s"}. The list is a seed, not a gate.` })
   );
 
   if (apps.length === 0) {
-    wrap.append(el("p", { class: "empty", text: "No seeded apps yet." }));
+    wrap.append(el("p", { class: "empty", text: "No seeded items yet." }));
     return wrap;
   }
 
   const options = collectOptions(apps);
   const controls = el("div", { class: "directory-controls" },
-    el("input", { type: "search", placeholder: "Search apps, creators, tags", "aria-label": "Search directory" }),
+    el("input", { type: "search", placeholder: "Search items, creators, tags", "aria-label": "Search directory" }),
     select("Target", "target", options.targets),
     select("Tag", "tag", options.tags),
     select("Trust", "trust", options.trust)
@@ -109,14 +109,14 @@ function renderDirectory(apps, data) {
       trust: trustSel.value
     });
     list.replaceChildren(...results.map(renderDirectoryCard));
-    if (results.length === 0) list.append(el("p", { class: "empty", text: "No apps match those filters." }));
+    if (results.length === 0) list.append(el("p", { class: "empty", text: "No items match those filters." }));
   }
 
   controls.addEventListener("input", update);
   controls.addEventListener("change", update);
   wrap.append(controls, list, el("p", { class: "muted correction-note" },
-    "Listed because the creator or platform published an apps.json feed. ",
-    el("a", { href: "https://github.com/itsbdell/apps-json/issues", text: "Request a correction or removal" }),
+    "Listed because the creator or platform published a made.json feed. ",
+    el("a", { href: "https://github.com/itsbdell/made-json/issues", text: "Request a correction or removal" }),
     "."
   ));
   update();
@@ -128,12 +128,12 @@ function renderDirectoryCard(app) {
   const readerUrl = safeLocalOrHttpUrl(app.reader_url);
   const targets = [
     appUrl ? el("a", { class: "target-btn target-web", href: appUrl, target: "_blank", rel: "noopener" },
-      el("span", { class: "target-label", text: "Open app" }),
+      el("span", { class: "target-label", text: "Open item" }),
       el("span", { class: "target-kind", text: "web" })
     ) : null,
     readerUrl ? el("a", { class: "target-btn", href: readerUrl },
       el("span", { class: "target-label", text: "Open feed" }),
-      el("span", { class: "target-kind", text: "apps.json" })
+      el("span", { class: "target-kind", text: "made.json" })
     ) : null
   ].filter(Boolean);
 

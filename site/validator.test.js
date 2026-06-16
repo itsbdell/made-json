@@ -7,7 +7,7 @@ import { validate } from "./validator.js";
 
 const VALID_MIN = {
   version: "1.0",
-  apps: [{ name: "Hi", url: "https://example.com" }]
+  items: [{ name: "Hi", url: "https://example.com" }]
 };
 
 test("happy path: minimal valid feed", () => {
@@ -19,7 +19,7 @@ test("happy path: minimal valid feed", () => {
 test("happy path: full example feed with optional fields", () => {
   const r = validate({
     version: "1.0",
-    self: "https://ada.example/apps.json",
+    self: "https://ada.example/made.json",
     updated: "2026-04-30T12:00:00Z",
     author: {
       name: "Ada Lovelace",
@@ -28,9 +28,9 @@ test("happy path: full example feed with optional fields", () => {
         { platform: "github", url: "https://github.com/ada-example" }
       ]
     },
-    apps: [
+    items: [
       {
-        id: "notebook", name: "Notebook", url: "https://notebook.ada.example",
+        id: "notebook", name: "Notebook", kind: "app", url: "https://notebook.ada.example",
         version: "0.4.2", vibe_coded: true, forkable: true,
         source: "https://github.com/ada-example/notebook",
         targets: [
@@ -44,8 +44,8 @@ test("happy path: full example feed with optional fields", () => {
   assert.equal(r.errors.length, 0);
 });
 
-test("edge case: empty apps array is valid", () => {
-  const r = validate({ version: "1.0", apps: [] });
+test("edge case: empty items array is valid", () => {
+  const r = validate({ version: "1.0", items: [] });
   assert.equal(r.ok, true);
 });
 
@@ -54,7 +54,7 @@ test("edge case: extra unknown top-level fields are tolerated", () => {
     version: "1.0",
     custom_field: "hi",
     weird_thing: { nested: true },
-    apps: [{ name: "X", url: "https://example.com", "x-foo": 42 }]
+    items: [{ name: "X", url: "https://example.com", "x-foo": 42 }]
   });
   assert.equal(r.ok, true);
 });
@@ -62,7 +62,7 @@ test("edge case: extra unknown top-level fields are tolerated", () => {
 test("edge case: unknown target.kind is tolerated (no error or warning)", () => {
   const r = validate({
     version: "1.0",
-    apps: [{
+    items: [{
       name: "X", url: "https://example.com",
       targets: [{ kind: "totally-made-up-platform", url: "https://example.com/x" }]
     }]
@@ -71,69 +71,69 @@ test("edge case: unknown target.kind is tolerated (no error or warning)", () => 
   assert.equal(r.warnings.length, 0);
 });
 
-test("edge case: app without targets is valid (top-level url is the launch)", () => {
+test("edge case: item without targets is valid (top-level url is the launch)", () => {
   const r = validate({
     version: "1.0",
-    apps: [{ name: "X", url: "https://example.com" }]
+    items: [{ name: "X", url: "https://example.com" }]
   });
   assert.equal(r.ok, true);
 });
 
 test("error path: missing version", () => {
-  const r = validate({ apps: [] });
+  const r = validate({ items: [] });
   assert.equal(r.ok, false);
   assert.ok(r.errors.some(e => e.path === "/version" && /required/.test(e.message)));
 });
 
 test("error path: wrong version string", () => {
-  const r = validate({ version: "2.0", apps: [] });
+  const r = validate({ version: "2.0", items: [] });
   assert.equal(r.ok, false);
   assert.ok(r.errors.some(e => e.path === "/version"));
 });
 
-test("error path: apps not an array", () => {
-  const r = validate({ version: "1.0", apps: "nope" });
+test("error path: items not an array", () => {
+  const r = validate({ version: "1.0", items: "nope" });
   assert.equal(r.ok, false);
-  assert.ok(r.errors.some(e => e.path === "/apps"));
+  assert.ok(r.errors.some(e => e.path === "/items"));
 });
 
-test("error path: app missing url surfaces /apps/0/url", () => {
-  const r = validate({ version: "1.0", apps: [{ name: "Bad" }] });
+test("error path: item missing url surfaces /items/0/url", () => {
+  const r = validate({ version: "1.0", items: [{ name: "Bad" }] });
   assert.equal(r.ok, false);
-  assert.ok(r.errors.some(e => e.path === "/apps/0/url"));
+  assert.ok(r.errors.some(e => e.path === "/items/0/url"));
 });
 
-test("error path: app missing name surfaces /apps/0/name", () => {
-  const r = validate({ version: "1.0", apps: [{ url: "https://example.com" }] });
+test("error path: item missing name surfaces /items/0/name", () => {
+  const r = validate({ version: "1.0", items: [{ url: "https://example.com" }] });
   assert.equal(r.ok, false);
-  assert.ok(r.errors.some(e => e.path === "/apps/0/name"));
+  assert.ok(r.errors.some(e => e.path === "/items/0/name"));
 });
 
 test("error path: invalid url string fails", () => {
-  const r = validate({ version: "1.0", apps: [{ name: "X", url: "not-a-url" }] });
+  const r = validate({ version: "1.0", items: [{ name: "X", url: "not-a-url" }] });
   assert.equal(r.ok, false);
-  assert.ok(r.errors.some(e => e.path === "/apps/0/url"));
+  assert.ok(r.errors.some(e => e.path === "/items/0/url"));
 });
 
-test("error path: per-app errors don't stop later apps from being validated", () => {
+test("error path: per-item errors don't stop later items from being validated", () => {
   const r = validate({
     version: "1.0",
-    apps: [
+    items: [
       { name: "Bad" },                             // missing url
       { name: "Good", url: "https://example.com" } // valid
     ]
   });
   assert.equal(r.ok, false);
-  assert.ok(r.errors.some(e => e.path === "/apps/0/url"));
-  // app 1 should produce no errors
-  assert.equal(r.errors.filter(e => e.path.startsWith("/apps/1")).length, 0);
+  assert.ok(r.errors.some(e => e.path === "/items/0/url"));
+  // item 1 should produce no errors
+  assert.equal(r.errors.filter(e => e.path.startsWith("/items/1")).length, 0);
 });
 
 test("warning path: malformed updated produces warning, not error", () => {
   const r = validate({
     version: "1.0",
     updated: "yesterday",
-    apps: []
+    items: []
   });
   assert.equal(r.ok, true);
   assert.ok(r.warnings.some(w => w.path === "/updated"));
@@ -143,10 +143,16 @@ test("warning path: malformed author.url produces warning", () => {
   const r = validate({
     version: "1.0",
     author: { name: "X", url: "not-a-url" },
-    apps: []
+    items: []
   });
   assert.equal(r.ok, true);
   assert.ok(r.warnings.some(w => w.path === "/author/url"));
+});
+
+test("error path: old apps collection is not the made.json contract", () => {
+  const r = validate({ version: "1.0", apps: [] });
+  assert.equal(r.ok, false);
+  assert.ok(r.errors.some(e => e.path === "/items"));
 });
 
 test("error path: feed is not an object", () => {

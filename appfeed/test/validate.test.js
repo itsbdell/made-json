@@ -41,7 +41,7 @@ test("happy path: example feed validates clean", async () => {
   const { code, stdout } = await run(["validate", EXAMPLE]);
   assert.equal(code, 0);
   assert.match(stdout, /valid/);
-  assert.match(stdout, /3 apps/);
+  assert.match(stdout, /3 items/);
 });
 
 test("happy path: --json on success emits parseable JSON", async () => {
@@ -49,7 +49,7 @@ test("happy path: --json on success emits parseable JSON", async () => {
   assert.equal(code, 0);
   const parsed = JSON.parse(stdout);
   assert.equal(parsed.ok, true);
-  assert.equal(parsed.appCount, 3);
+  assert.equal(parsed.itemCount, 3);
   assert.equal(parsed.feedVersion, "1.0");
 });
 
@@ -63,10 +63,10 @@ test("edge case: extra unknown top-level fields are tolerated", async () => {
   assert.equal(code, 0);
 });
 
-test("edge case: empty apps array is valid", async () => {
-  const { code, stdout } = await run(["validate", join(FIXTURES, "empty-apps.json")]);
+test("edge case: empty items array is valid", async () => {
+  const { code, stdout } = await run(["validate", join(FIXTURES, "empty-items.json")]);
   assert.equal(code, 0);
-  assert.match(stdout, /0 apps/);
+  assert.match(stdout, /0 items/);
 });
 
 test("error path: missing top-level version exits 1", async () => {
@@ -75,10 +75,10 @@ test("error path: missing top-level version exits 1", async () => {
   assert.match(stderr, /version/i);
 });
 
-test("error path: missing app url exits 1 with /apps/0 path", async () => {
+test("error path: missing item url exits 1 with /items/0 path", async () => {
   const { code, stderr } = await run(["validate", join(FIXTURES, "missing-app-url.json")]);
   assert.equal(code, 1);
-  assert.match(stderr, /\/apps\/0/);
+  assert.match(stderr, /\/items\/0/);
 });
 
 test("error path: invalid JSON exits 2", async () => {
@@ -109,11 +109,11 @@ test("error path: --json on schema failure emits parseable JSON", async () => {
 
 test("integration: validates a feed served over HTTP", async (t) => {
   const server = createServer((req, res) => {
-    if (req.url === "/apps.json") {
+    if (req.url === "/made.json") {
       res.writeHead(200, { "Content-Type": "application/json" });
       res.end(JSON.stringify({
         version: "1.0",
-        apps: [{ name: "Net", url: "https://example.com" }]
+        items: [{ name: "Net", url: "https://example.com" }]
       }));
     } else {
       res.writeHead(404);
@@ -123,7 +123,7 @@ test("integration: validates a feed served over HTTP", async (t) => {
   if (!await listenOrSkip(t, server)) return;
   const { port } = server.address();
   try {
-    const { code, stdout } = await run(["validate", `http://127.0.0.1:${port}/apps.json`]);
+    const { code, stdout } = await run(["validate", `http://127.0.0.1:${port}/made.json`]);
     assert.equal(code, 0);
     assert.match(stdout, /valid/);
   } finally {
@@ -131,13 +131,14 @@ test("integration: validates a feed served over HTTP", async (t) => {
   }
 });
 
-test("publisher: add creates a valid apps.json file", async () => {
+test("publisher: add creates a valid made.json file", async () => {
   const tmp = join(FIXTURES, "tmp-add.json");
   const { code, stdout } = await run([
     "add",
     tmp,
     "--name", "Tiny Tool",
     "--url", "https://example.com/tiny",
+    "--kind", "tool",
     "--description", "A small useful app.",
     "--tags", "utility,ai",
     "--target", "web|https://example.com/tiny|Open",
@@ -155,12 +156,13 @@ test("publisher: add creates a valid apps.json file", async () => {
   try {
     const feed = JSON.parse(await readFile(tmp, "utf8"));
     assert.equal(feed.version, "1.0");
-    assert.equal(feed.apps.length, 1);
-    assert.equal(feed.apps[0].id, "tiny-tool");
-    assert.deepEqual(feed.apps[0].tags, ["utility", "ai"]);
-    assert.deepEqual(feed.apps[0].targets, [{ kind: "web", url: "https://example.com/tiny", label: "Open" }]);
-    assert.equal(feed.apps[0].vibe_coded, true);
-    assert.equal(feed.apps[0].forkable, true);
+    assert.equal(feed.items.length, 1);
+    assert.equal(feed.items[0].id, "tiny-tool");
+    assert.equal(feed.items[0].kind, "tool");
+    assert.deepEqual(feed.items[0].tags, ["utility", "ai"]);
+    assert.deepEqual(feed.items[0].targets, [{ kind: "web", url: "https://example.com/tiny", label: "Open" }]);
+    assert.equal(feed.items[0].vibe_coded, true);
+    assert.equal(feed.items[0].forkable, true);
   } finally {
     await unlink(tmp).catch(() => {});
   }
@@ -171,7 +173,7 @@ test("publisher: add refuses duplicates unless --replace is passed", async () =>
   const { writeFile, unlink } = await import("node:fs/promises");
   await writeFile(tmp, JSON.stringify({
     version: "1.0",
-    apps: [{ id: "tiny", name: "Tiny", url: "https://example.com/tiny" }]
+    items: [{ id: "tiny", name: "Tiny", url: "https://example.com/tiny" }]
   }));
 
   try {
@@ -210,6 +212,35 @@ test("error path: HTTP 404 exits 2", async (t) => {
     const { code, stderr } = await run(["validate", `http://127.0.0.1:${port}/missing.json`]);
     assert.equal(code, 2);
     assert.match(stderr, /404/);
+  } finally {
+    await new Promise(resolve => server.close(resolve));
+  }
+});
+
+test("integration: URL validate falls back to /.well-known/made.json after 404", async (t) => {
+  const server = createServer((req, res) => {
+    if (req.url === "/made.json") {
+      res.writeHead(404);
+      res.end("not found");
+      return;
+    }
+    if (req.url === "/.well-known/made.json") {
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({
+        version: "1.0",
+        items: [{ name: "Fallback", url: "https://example.com" }]
+      }));
+      return;
+    }
+    res.writeHead(404);
+    res.end("missing");
+  });
+  if (!await listenOrSkip(t, server)) return;
+  const { port } = server.address();
+  try {
+    const { code, stdout } = await run(["validate", `http://127.0.0.1:${port}/made.json`]);
+    assert.equal(code, 0);
+    assert.match(stdout, /valid/);
   } finally {
     await new Promise(resolve => server.close(resolve));
   }

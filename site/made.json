@@ -1,0 +1,161 @@
+{
+  "version": "1.0",
+  "self": "https://made-json.org/made.json",
+  "updated": "2026-06-16T00:00:00-04:00",
+  "author": {
+    "name": "made.json",
+    "url": "https://made-json.org",
+    "social": [
+      {
+        "platform": "github",
+        "url": "https://github.com/itsbdell/made-json",
+        "handle": "itsbdell/made-json"
+      }
+    ]
+  },
+  "items": [
+    {
+      "id": "made-json-standard",
+      "name": "made.json Standard",
+      "kind": "standard",
+      "description": "A small JSON file format for publishing the apps, skills, tools, prompts, workflows, and agents a person or organization makes.",
+      "url": "https://made-json.org",
+      "updated": "2026-06-16T00:00:00-04:00",
+      "tags": ["standard", "feed", "open-web"],
+      "source": "https://github.com/itsbdell/made-json",
+      "forkable": true,
+      "targets": [
+        {
+          "kind": "web",
+          "url": "https://made-json.org",
+          "label": "Home"
+        },
+        {
+          "kind": "web",
+          "url": "https://github.com/itsbdell/made-json/blob/main/spec/SPEC.md",
+          "label": "Spec"
+        },
+        {
+          "kind": "web",
+          "url": "https://github.com/itsbdell/made-json/blob/main/spec/apps.schema.json",
+          "label": "JSON Schema"
+        }
+      ]
+    },
+    {
+      "id": "appfeed-cli",
+      "name": "appfeed CLI",
+      "kind": "cli",
+      "description": "Reference CLI for validating and maintaining made.json feeds.",
+      "url": "https://www.npmjs.com/package/@apps-json/cli",
+      "updated": "2026-06-16T00:00:00-04:00",
+      "tags": ["cli", "validator", "publishing"],
+      "source": "https://github.com/itsbdell/made-json/tree/main/appfeed",
+      "forkable": true,
+      "targets": [
+        {
+          "kind": "cli",
+          "command": "npx @apps-json/cli validate <url-or-path>",
+          "label": "Validate a feed"
+        }
+      ]
+    },
+    {
+      "id": "made-json-reader",
+      "name": "made.json Reader",
+      "kind": "app",
+      "description": "Reference browser reader for rendering and validating a made.json feed URL.",
+      "url": "https://made-json.org/?feed=https://yourdomain.com/made.json",
+      "updated": "2026-06-16T00:00:00-04:00",
+      "tags": ["reader", "validator", "web"],
+      "source": "https://github.com/itsbdell/made-json/tree/main/site",
+      "forkable": true,
+      "targets": [
+        {
+          "kind": "web",
+          "url": "https://made-json.org/?feed=https://yourdomain.com/made.json",
+          "label": "Open reader"
+        }
+      ]
+    },
+    {
+      "id": "made-json-badge",
+      "name": "made.json Badge Generator",
+      "kind": "app",
+      "description": "Paste-ready badge generator for linking a site or README to a made.json feed.",
+      "url": "https://made-json.org/badge.html",
+      "updated": "2026-06-16T00:00:00-04:00",
+      "tags": ["badge", "publishing", "web"],
+      "source": "https://github.com/itsbdell/made-json/tree/main/site",
+      "forkable": true,
+      "targets": [
+        {
+          "kind": "web",
+          "url": "https://made-json.org/badge.html",
+          "label": "Generate badge"
+        }
+      ]
+    },
+    {
+      "id": "made-json-digest",
+      "name": "made.json Digest",
+      "kind": "app",
+      "description": "Example digest and subscription feeds generated from the seeded made.json directory.",
+      "url": "https://made-json.org/digest.html",
+      "updated": "2026-06-16T00:00:00-04:00",
+      "tags": ["digest", "directory", "feed"],
+      "source": "https://github.com/itsbdell/made-json/tree/main/site",
+      "forkable": true,
+      "targets": [
+        {
+          "kind": "web",
+          "url": "https://made-json.org/digest.html",
+          "label": "Open digest"
+        },
+        {
+          "kind": "web",
+          "url": "https://made-json.org/feed.json",
+          "label": "JSON Feed"
+        },
+        {
+          "kind": "web",
+          "url": "https://made-json.org/feed.xml",
+          "label": "RSS"
+        }
+      ]
+    },
+    {
+      "id": "made-json-agent-skills",
+      "name": "made.json Agent Skills",
+      "kind": "skill",
+      "description": "Agent-readable skills for bootstrapping and maintaining made.json feeds.",
+      "url": "https://github.com/itsbdell/made-json-agent-skills",
+      "updated": "2026-06-16T00:00:00-04:00",
+      "tags": ["agent-skills", "publishing", "feeds"],
+      "source": "https://github.com/itsbdell/made-json-agent-skills",
+      "forkable": true,
+      "targets": [
+        {
+          "kind": "claude-plugin",
+          "url": "https://github.com/itsbdell/made-json-agent-skills",
+          "label": "Claude Code plugin"
+        },
+        {
+          "kind": "codex-plugin",
+          "url": "https://github.com/itsbdell/made-json-agent-skills",
+          "label": "Codex plugin"
+        },
+        {
+          "kind": "claude-skill",
+          "url": "https://github.com/itsbdell/made-json-agent-skills/tree/main/skills/made-json-setup",
+          "label": "Setup skill"
+        },
+        {
+          "kind": "claude-skill",
+          "url": "https://github.com/itsbdell/made-json-agent-skills/tree/main/skills/made-json-publisher",
+          "label": "Publisher skill"
+        }
+      ]
+    }
+  ]
+}
