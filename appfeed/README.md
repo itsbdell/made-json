@@ -11,19 +11,17 @@ The CLI currently implements `validate` and `add`. The other commands
 workflow; invoking them prints a "coming soon" message and exits `64`
 (`EX_USAGE`).
 
-The npm name `appfeed` is taken by an unrelated 2014 package. This package
-currently publishes as **`@apps-json/cli`** and installs the binary as
-`appfeed`. The feed contract is now `made.json`; package and binary renaming
-can happen in a later release.
+The npm package is **`@made-json/cli`** and it installs the binary as
+`appfeed`.
 
 ## Install
 
 ```bash
 # zero-install
-npx @apps-json/cli validate https://ada.example/made.json
+npx @made-json/cli validate https://ada.example/made.json
 
 # global install
-npm install -g @apps-json/cli
+npm install -g @made-json/cli
 appfeed --help
 ```
 

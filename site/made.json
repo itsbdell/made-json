@@ -47,7 +47,7 @@
       "name": "appfeed CLI",
       "kind": "cli",
       "description": "Reference CLI for validating and maintaining made.json feeds.",
-      "url": "https://www.npmjs.com/package/@apps-json/cli",
+      "url": "https://www.npmjs.com/package/@made-json/cli",
       "updated": "2026-06-16T00:00:00-04:00",
       "tags": ["cli", "validator", "publishing"],
       "source": "https://github.com/itsbdell/made-json/tree/main/appfeed",
@@ -55,7 +55,7 @@
       "targets": [
         {
           "kind": "cli",
-          "command": "npx @apps-json/cli validate <url-or-path>",
+          "command": "npx @made-json/cli validate <url-or-path>",
           "label": "Validate a feed"
         }
       ]

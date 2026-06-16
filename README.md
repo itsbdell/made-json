@@ -112,7 +112,7 @@ The seed list does not invent feeds for real creators.
 | [`spec/SPEC.md`](spec/SPEC.md) | Human-readable spec (v1.0). |
 | [`spec/apps.schema.json`](spec/apps.schema.json) | JSON Schema (Draft 2020-12). |
 | [`spec/apps.example.json`](spec/apps.example.json) | A complete example feed. |
-| [`appfeed/`](appfeed/) | Example/reference CLI. Temporarily publishes as `@apps-json/cli`. |
+| [`appfeed/`](appfeed/) | Example/reference CLI. Publishes as `@made-json/cli`. |
 | [`site/`](site/) | Example web reader, seeded directory, digest, badge generator, and shared validator. |
 | [`docs/ECOSYSTEM.md`](docs/ECOSYSTEM.md) | Map of readers, discovery, adopters. |
 | [`docs/PUBLISHING.md`](docs/PUBLISHING.md) | How to publish and keep a feed fresh. |
@@ -128,11 +128,11 @@ a smaller repo you can point agents at directly.
 ## Try It
 
 ```bash
-# try the CLI without installing; package name is temporary
-npx @apps-json/cli validate <url-or-path>
+# try the CLI without installing
+npx @made-json/cli validate <url-or-path>
 
 # add a new item to a local feed
-npx @apps-json/cli add ./made.json --name "Tiny Tool" --kind tool --url "https://example.com/tiny"
+npx @made-json/cli add ./made.json --name "Tiny Tool" --kind tool --url "https://example.com/tiny"
 
 # try the reader
 open https://made-json.org/?feed=<url-of-your-made.json>

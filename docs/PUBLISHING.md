@@ -21,7 +21,7 @@ https://yourdomain.com/.well-known/made.json
 Good for a solo builder with a few items.
 
 ```bash
-npx @apps-json/cli validate ./made.json
+npx @made-json/cli validate ./made.json
 ```
 
 Edit the file when you ship a new app, skill, tool, prompt, workflow, agent, or
@@ -34,7 +34,7 @@ Good when you want a small repeatable command without building your own
 generator.
 
 ```bash
-npx @apps-json/cli add ./made.json \
+npx @made-json/cli add ./made.json \
   --name "Tiny Tool" \
   --kind tool \
   --url "https://example.com/tiny" \
@@ -107,7 +107,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - run: npx @apps-json/cli validate ./made.json
+      - run: npx @made-json/cli validate ./made.json
 ```
 
 ## Agent Workflow

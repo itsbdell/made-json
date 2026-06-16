@@ -1,5 +1,5 @@
 {
-  "name": "@apps-json/cli",
+  "name": "@made-json/cli",
   "version": "0.1.0",
   "description": "Reference CLI for the made.json standard. Validate and maintain made.json feeds. Installs the 'appfeed' binary.",
   "homepage": "https://made-json.org",

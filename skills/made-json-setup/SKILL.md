@@ -143,7 +143,7 @@ rg --files \
    - Ask before deleting entries.
 
 7. Validate and report.
-   - Run `npx @apps-json/cli validate <feed-path>` when available.
+   - Run `npx @made-json/cli validate <feed-path>` when available.
    - If working inside the main `made-json` repo, run `node appfeed/bin/appfeed.js
      validate <feed-path>`.
    - Report entries added, `needs_confirmation` candidates, `omit_for_now`
