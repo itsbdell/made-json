@@ -2,6 +2,24 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "outputDirectory": "site",
   "cleanUrls": true,
+  "redirects": [
+    {
+      "source": "/",
+      "has": [
+        { "type": "host", "value": "www.made-json.org" }
+      ],
+      "destination": "https://made-json.org/",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        { "type": "host", "value": "www.made-json.org" }
+      ],
+      "destination": "https://made-json.org/:path*",
+      "permanent": true
+    }
+  ],
   "headers": [
     {
       "source": "/index.html",
