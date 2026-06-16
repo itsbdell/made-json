@@ -50,7 +50,7 @@ software.
 
 4. Validate.
    - Run `npx @apps-json/cli validate <feed-path>` when available.
-   - If working inside the main `apps-json` repo, run `node appfeed/bin/appfeed.js
+   - If working inside the main `made-json` repo, run `node appfeed/bin/appfeed.js
      validate <feed-path>`.
    - Fix schema errors before finishing.
 

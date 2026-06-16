@@ -1,29 +1,29 @@
 # made.json
 
-`made.json` is a small file for publishing the things you make: apps, skills,
-tools, prompts, workflows, agents, templates, CLIs, MCP servers, and other
-useful software-shaped artifacts.
+`made.json` is a tiny open standard for publishing software, skills, tools,
+prompts, workflows, agents, templates, CLIs, MCP servers, and other useful
+software-shaped artifacts.
 
 Home: [made-json.org](https://made-json.org)
 
 Put it at `https://yourdomain.com/made.json`, list what you have made, and
-people can discover, follow, render, install, and fork it from anywhere.
+people can discover, follow, render, install, and fork your work from anywhere.
 
-It is RSS-ish: publish one plain file, and any reader, crawler, launcher,
-directory, search engine, or agent can understand it.
+It is like RSS for software-shaped work: publish one plain file, and any
+reader, crawler, launcher, directory, search engine, or agent can understand it.
 
 ## Why this exists
 
-More people are making small, personal software: tools, experiments, Claude and
-Codex skills, prototypes, prompts, workflows, tiny utilities, and apps that do
-one useful thing.
+More people are publishing software as part of their work: tools, experiments,
+Claude and Codex skills, prototypes, prompts, workflows, tiny utilities, and
+apps that do one useful thing.
 
 But there is no simple way to follow what someone makes as a set. These
 artifacts are scattered across GitHub repos, launch posts, personal sites, app
 stores, plugin directories, Discord links, and half-forgotten demos.
 
-`made.json` gives those made things a home on the open web. No central registry,
-no submission form, no platform account required.
+`made.json` gives that work a home on the open web. No central registry, no
+submission form, no platform account required.
 
 ## Start small
 
@@ -49,8 +49,8 @@ required. `kind` is optional, but useful.
 
 ## Add claims when they help
 
-Made things are different from posts. People want to know where something runs,
-whether it is current, whether the source is available, whether it was
+Software artifacts are different from posts. People want to know where something
+runs, whether it is current, whether the source is available, whether it was
 AI-assisted, and whether it can be forked.
 
 `made.json` handles that with optional creator claims:
@@ -83,13 +83,14 @@ on top later.
   is just the file.
 - **Tiny required surface.** Only `version`, `items`, `name`, and `url` are
   required.
-- **Useful software context.** Made things need a little more metadata than
-  posts: where to run them, what version they are, where the source lives, and
-  whether they can be forked.
+- **Useful software context.** Software artifacts need a little more metadata
+  than posts: where to run them, what version they are, where the source lives,
+  and whether they can be forked.
 - **Claims, not certification.** Creator fields are creator claims. Readers can
   show them; trust layers can come later.
-- **For builders and audiences.** Builders get a canonical list. Audiences get
-  a way to follow and discover what people are making.
+- **For builders and audiences.** Builders get a canonical list. Readers and
+  subscribers get a way to follow, reuse, and publish from what people are
+  making.
 
 ## Reader, Directory, and Digest
 
@@ -111,7 +112,7 @@ The seed list does not invent feeds for real creators.
 | [`spec/SPEC.md`](spec/SPEC.md) | Human-readable spec (v1.0). |
 | [`spec/apps.schema.json`](spec/apps.schema.json) | JSON Schema (Draft 2020-12). |
 | [`spec/apps.example.json`](spec/apps.example.json) | A complete example feed. |
-| [`appfeed/`](appfeed/) | Example/reference CLI. Currently publishes as `@apps-json/cli`. |
+| [`appfeed/`](appfeed/) | Example/reference CLI. Temporarily publishes as `@apps-json/cli`. |
 | [`site/`](site/) | Example web reader, seeded directory, digest, badge generator, and shared validator. |
 | [`docs/ECOSYSTEM.md`](docs/ECOSYSTEM.md) | Map of readers, discovery, adopters. |
 | [`docs/PUBLISHING.md`](docs/PUBLISHING.md) | How to publish and keep a feed fresh. |
@@ -127,7 +128,7 @@ a smaller repo you can point agents at directly.
 ## Try It
 
 ```bash
-# try the CLI without installing
+# try the CLI without installing; package name is temporary
 npx @apps-json/cli validate <url-or-path>
 
 # add a new item to a local feed

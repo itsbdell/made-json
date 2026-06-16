@@ -71,7 +71,7 @@ rg --files \
      `docs/made-feed-inventory.md` with scan roots, safe-to-add entries,
      candidates needing confirmation, and skipped repos with reasons.
 
-3. Decide whether a repo contains publishable made things.
+3. Decide whether a repo contains publishable software artifacts.
    - Strong signals: deployed web app config, package scripts like `dev`,
      `start`, or `deploy`, app routes/pages, CLI bin entries, Electron/Tauri,
      Expo/React Native, browser extension manifests, MCP servers, Claude/Codex
@@ -144,7 +144,7 @@ rg --files \
 
 7. Validate and report.
    - Run `npx @apps-json/cli validate <feed-path>` when available.
-   - If working inside the main `apps-json` repo, run `node appfeed/bin/appfeed.js
+   - If working inside the main `made-json` repo, run `node appfeed/bin/appfeed.js
      validate <feed-path>`.
    - Report entries added, `needs_confirmation` candidates, `omit_for_now`
      skips, and evidence gaps.

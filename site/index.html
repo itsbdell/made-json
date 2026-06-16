@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>made.json — an open standard for made things</title>
-  <meta name="description" content="A tiny JSON file for publishing, discovering, and syndicating apps, skills, tools, prompts, workflows, and agents across the open web." />
+  <title>made.json — an open standard for publishing software feeds</title>
+  <meta name="description" content="A tiny open standard for publishing software, skills, tools, prompts, workflows, and agents across the open web." />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="stylesheet" href="/styles.css?v=20260502-8" />
   <meta property="og:title" content="made.json" />
-  <meta property="og:description" content="A decentralized standard for publishing made things. RSS for apps, skills, tools, prompts, workflows, and agents." />
+  <meta property="og:description" content="A tiny open standard for publishing software, skills, tools, prompts, workflows, and agents. RSS for what people make." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://made-json.org/" />
   <link rel="canonical" href="https://made-json.org/" />
@@ -27,16 +27,16 @@
   <main id="directory-mode">
     <header>
       <h1>made.json</h1>
-      <p class="muted">A small file for publishing the things you make. Put it at <code>yourdomain.com/made.json</code>, list your apps, skills, tools, prompts, workflows, and agents, and people can discover, follow, render, install, and fork them from anywhere.</p>
+      <p class="muted">A tiny open standard for publishing software, skills, tools, prompts, workflows, and agents. Put one file at <code>yourdomain.com/made.json</code> so people can discover, follow, render, install, and fork what you make from anywhere.</p>
     </header>
 
     <hr class="rule" />
 
     <section id="about">
       <h2>Why this exists</h2>
-      <p>More people are making small, personal software: tools, experiments, Claude skills, prototypes, prompts, workflows, tiny utilities, and apps that do one useful thing.</p>
+      <p>More people are publishing software as part of their work: tools, experiments, Claude and Codex skills, prototypes, prompts, workflows, tiny utilities, and apps that do one useful thing.</p>
       <p>But there is no simple way to follow what someone makes as a set. These artifacts are scattered across GitHub repos, launch posts, personal sites, app stores, plugin directories, Discord links, and half-forgotten demos.</p>
-      <p><code>made.json</code> gives those made things a home on the open web. It is RSS-ish: publish one plain file, and any reader, crawler, launcher, directory, or agent can understand it.</p>
+      <p><code>made.json</code> gives that work a home on the open web. It is like RSS for software-shaped artifacts: publish one plain file, and any reader, crawler, launcher, directory, or agent can understand it.</p>
     </section>
 
     <section>
@@ -55,7 +55,7 @@
 
     <section>
       <h2>Add claims when they help</h2>
-      <p>Made things are different from posts. People want to know where something runs, whether it is current, whether the source is available, whether it was AI-assisted, and whether it can be forked.</p>
+      <p>Software artifacts are different from posts. People want to know where something runs, whether it is current, whether the source is available, whether it was AI-assisted, and whether it can be forked.</p>
       <p><code>made.json</code> handles that with optional creator claims:</p>
       <pre class="mono"><code>{
   "name": "My Cool App",
@@ -80,9 +80,9 @@
         <li><strong>Publish to participate.</strong> A public <code>made.json</code> file is the opt-in.</li>
         <li><strong>No central registry.</strong> Directories and readers can exist, but the standard is just the file.</li>
         <li><strong>Tiny required surface.</strong> Only <code>version</code>, <code>items</code>, <code>name</code>, and <code>url</code> are required.</li>
-        <li><strong>Useful software context.</strong> Made things need a little more metadata than posts: where to run them, what version they are, where the source lives, and whether they can be forked.</li>
+        <li><strong>Useful software context.</strong> Software artifacts need a little more metadata than posts: where to run them, what version they are, where the source lives, and whether they can be forked.</li>
         <li><strong>Claims, not certification.</strong> Creator fields are creator claims. Readers can show them; trust layers can come later.</li>
-        <li><strong>For builders and audiences.</strong> Builders get a canonical list. Audiences get a way to follow and discover what people are making.</li>
+        <li><strong>For builders and audiences.</strong> Builders get a canonical list. Readers and subscribers get a way to follow, reuse, and publish from what people are making.</li>
       </ul>
     </section>
 
@@ -112,10 +112,10 @@
 
     <section class="placeholder">
       <h2>Status</h2>
-      <p>Spec is <strong>v1.0 (draft)</strong>. The reader, badge, seeded directory, and digest are example tools built around the format. They are not required infrastructure, and they are not a platform.</p>
+      <p>Spec is <strong>v1.0 alpha</strong>. The reader, badge, seeded directory, and digest are example tools built around the format. They are not required infrastructure, and they are not a platform.</p>
       <ul>
         <li>Read the spec: <a href="https://github.com/itsbdell/made-json/blob/main/spec/SPEC.md">spec/SPEC.md</a></li>
-        <li>Validator CLI: <code>npx @apps-json/cli validate &lt;url&gt;</code></li>
+        <li>Validator CLI, temporary package name: <code>npx @apps-json/cli validate &lt;url&gt;</code></li>
         <li>Project feed: <a href="/made.json"><code>made-json.org/made.json</code></a></li>
         <li>Tools: <a href="/badge.html">badge</a> · <a href="/digest.html">digest</a> · <a href="/feed.json">JSON Feed</a> · <a href="/feed.xml">RSS</a></li>
         <li>Source: <a href="https://github.com/itsbdell/made-json">github.com/itsbdell/made-json</a></li>
