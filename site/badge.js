@@ -6,11 +6,11 @@
 import { validate } from "/validator.js?v=20260502-8";
 import { safeWebUrl } from "/render.js?v=20260502-8";
 import { normalizeFeedUrl } from "/url-utils.js?v=20260502-8";
+import { fetchFeedWithFallback } from "/feed-loader.js?v=20260529-1";
 
 const READER_ORIGIN = location.origin;
 const BADGE_PATH = "/badge.svg";
 const READER_PATH = "/";
-const FETCH_TIMEOUT_MS = 15000;
 
 const $input = document.getElementById("feed-input");
 const $status = document.getElementById("feed-status");
@@ -73,45 +73,33 @@ async function liveValidate(url) {
   liveValidateController = controller;
 
   setStatus(`Checking ${url}…`);
-  let res;
-  try {
-    res = await fetch(url, {
-      redirect: "follow",
-      signal: AbortSignal.any
-        ? AbortSignal.any([controller.signal, AbortSignal.timeout(FETCH_TIMEOUT_MS)])
-        : controller.signal
-    });
-  } catch (e) {
-    if (e?.name === "AbortError") return;  // superseded by a newer URL
-    if (e?.name === "TimeoutError") {
-      if (controller.signal.aborted) return;
+  const result = await fetchFeedWithFallback(url, { signal: controller.signal });
+  if (!result.ok) {
+    if (result.kind === "aborted") return;
+    if (result.kind === "timeout") {
       setStatus(`(timed out reaching ${url} — the badge will still link correctly.)`, "muted");
       return;
     }
-    if (controller.signal.aborted) return;
-    setStatus(`(couldn't reach ${url} — likely a CORS issue. The badge will still link correctly.)`, "muted");
+    if (result.kind === "network") {
+      setStatus(`(couldn't reach ${url} — likely a CORS issue. The badge will still link correctly.)`, "muted");
+      return;
+    }
+    if (result.kind === "http") {
+      setStatus(`✖ HTTP ${result.status} from ${result.url}`, "warn");
+      return;
+    }
+    if (result.kind === "parse") {
+      setStatus(`✖ ${result.url} did not return JSON.`, "warn");
+      return;
+    }
+    setStatus(`✖ ${result.message}`, "warn");
     return;
   }
 
-  if (controller.signal.aborted) return;
-
-  if (!res.ok) {
-    setStatus(`✖ HTTP ${res.status} from ${url}`, "warn");
-    return;
-  }
-  const text = await res.text();
-  if (controller.signal.aborted) return;
-
-  let data;
-  try { data = JSON.parse(text); }
-  catch {
-    setStatus(`✖ ${url} did not return JSON.`, "warn");
-    return;
-  }
-  const v = validate(data);
+  const v = validate(result.data);
   if (v.ok) {
-    const n = Array.isArray(data.apps) ? data.apps.length : 0;
-    setStatus(`✓ valid — ${n} app${n === 1 ? "" : "s"}`, "ok");
+    const n = Array.isArray(result.data.items) ? result.data.items.length : 0;
+    setStatus(`✓ valid — ${n} item${n === 1 ? "" : "s"}`, "ok");
   } else {
     setStatus(`✖ ${v.errors.length} schema error${v.errors.length === 1 ? "" : "s"} (badge will still work; reader will surface details)`, "warn");
   }
@@ -137,21 +125,21 @@ function renderPreviews(feedUrl) {
   a.rel = "noopener";
   const i = document.createElement("img");
   i.src = img;
-  i.alt = "apps.json";
+  i.alt = "made.json";
   i.height = 22;
   a.append(i);
   $previewLink.append(a);
 
   // HTML — live link
   $snippetLink.value =
-    `<a href="${escapeAttr(reader)}"><img src="${escapeAttr(img)}" alt="apps.json" height="22"></a>`;
+    `<a href="${escapeAttr(reader)}"><img src="${escapeAttr(img)}" alt="made.json" height="22"></a>`;
 
   // HTML — static SVG only
   $snippetStatic.value =
-    `<img src="${escapeAttr(img)}" alt="apps.json" height="22">`;
+    `<img src="${escapeAttr(img)}" alt="made.json" height="22">`;
 
   // Markdown — angle-bracket the URL so legal-but-paren-bearing URLs survive
-  $snippetMd.value = `[![apps.json](<${img}>)](<${reader}>)`;
+  $snippetMd.value = `[![made.json](<${img}>)](<${reader}>)`;
 }
 
 function escapeAttr(s) {

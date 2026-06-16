@@ -45,8 +45,9 @@ function claim(label, value, { allowAppUri = false } = {}) {
   };
 }
 
-export function deriveTrustReport({ feed = {}, app = null, sourceUrl = null, checks = {} } = {}) {
-  const author = app?.author || feed.author || {};
+export function deriveTrustReport({ feed = {}, item = null, app = null, sourceUrl = null, checks = {} } = {}) {
+  const artifact = item || app;
+  const author = artifact?.author || feed.author || {};
   const report = {
     summary: {
       present: 0,
@@ -64,9 +65,9 @@ export function deriveTrustReport({ feed = {}, app = null, sourceUrl = null, che
   const claims = [
     claim("feed", sourceUrl || feed.self),
     claim("author", author.url),
-    claim("source", app?.source),
-    claim("prompt log", app?.prompt_log),
-    claim("replaces", app?.replaces, { allowAppUri: true })
+    claim("source", artifact?.source),
+    claim("prompt log", artifact?.prompt_log),
+    claim("replaces", artifact?.replaces, { allowAppUri: true })
   ];
 
   if (Array.isArray(author.social)) {
@@ -100,7 +101,7 @@ export function deriveTrustReport({ feed = {}, app = null, sourceUrl = null, che
     report.summary.not_checked += 1;
   }
 
-  if (app?.forkable === true) {
+  if (artifact?.forkable === true) {
     report.claims.push({ label: "forkable", state: TRUST_STATES.PRESENT, value: true });
     report.summary.present += 1;
   }

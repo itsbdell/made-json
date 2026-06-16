@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "self": "https://ada.example/apps.json",
+  "self": "https://ada.example/made.json",
   "updated": "2026-04-30T12:00:00Z",
   "author": {
     "name": "Ada Lovelace",
@@ -10,10 +10,11 @@
       { "platform": "mastodon", "url": "https://mastodon.example/@ada", "handle": "@ada@mastodon.example" }
     ]
   },
-  "apps": [
+  "items": [
     {
       "id": "notebook",
       "name": "Notebook",
+      "kind": "app",
       "description": "A web-based notebook for jotting and threading ideas.",
       "url": "https://notebook.ada.example",
       "version": "0.4.2",
@@ -29,6 +30,7 @@
     {
       "id": "outreach",
       "name": "Outreach",
+      "kind": "skill",
       "description": "Topic-driven networking pipeline as a Claude skill.",
       "url": "https://ada.example/skills/outreach",
       "vibe_coded": true,
@@ -42,7 +44,8 @@
     },
     {
       "id": "phrase-chain-fork",
-      "name": "Phrase Chain — Spanish edition",
+      "name": "Phrase Chain Spanish edition",
+      "kind": "tool",
       "description": "Fork of phrase-chain retrained on Spanish corpora.",
       "url": "https://ada.example/phrase-chain-es",
       "vibe_coded": true,

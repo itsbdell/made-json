@@ -29,7 +29,7 @@ export async function loadSeedFeed(seed, { fetchImpl = fetch } = {}) {
     return readJson(join(REPO_ROOT, seed.fixture));
   }
   const res = await fetchImpl(seed.feed_url, {
-    headers: { "User-Agent": "apps-json-seed-builder/0.1 (+https://apps-json.org)" },
+    headers: { "User-Agent": "made-json-seed-builder/0.1 (+https://made-json.org)" },
     redirect: "follow"
   });
   if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`);
@@ -42,8 +42,8 @@ function toDate(value, fallback) {
   return fallback;
 }
 
-function appId(seed, app, index) {
-  return `${seed.id}:${app.id || app.url || index}`;
+function itemId(seed, item, index) {
+  return `${seed.id}:${item.id || item.url || index}`;
 }
 
 function readerFeedUrl(seed) {
@@ -57,25 +57,26 @@ function publicReaderUrl(seed) {
   return `/?feed=${encodeURIComponent(readerFeedUrl(seed))}`;
 }
 
-function summarizeApp(seed, feed, app, index, now) {
-  const updated = toDate(app.updated || feed.updated, now);
-  const trust = deriveTrustReport({ feed, app, sourceUrl: seed.feed_url });
+function summarizeItem(seed, feed, item, index, now) {
+  const updated = toDate(item.updated || feed.updated, now);
+  const trust = deriveTrustReport({ feed, item, sourceUrl: seed.feed_url });
   return {
-    id: appId(seed, app, index),
+    id: itemId(seed, item, index),
     feed_id: seed.id,
     feed_url: seed.feed_url,
-    name: app.name,
-    description: app.description || "",
-    url: app.url,
-    version: app.version || null,
+    name: item.name,
+    kind: item.kind || null,
+    description: item.description || "",
+    url: item.url,
+    version: item.version || null,
     updated,
-    tags: Array.isArray(app.tags) ? app.tags.filter(t => typeof t === "string") : [],
-    targets: Array.isArray(app.targets) ? app.targets : [],
-    vibe_coded: app.vibe_coded === true,
-    forkable: app.forkable === true,
-    source: safeHttpUrl(app.source),
-    prompt_log: safeHttpUrl(app.prompt_log),
-    replaces: typeof app.replaces === "string" ? app.replaces : null,
+    tags: Array.isArray(item.tags) ? item.tags.filter(t => typeof t === "string") : [],
+    targets: Array.isArray(item.targets) ? item.targets : [],
+    vibe_coded: item.vibe_coded === true,
+    forkable: item.forkable === true,
+    source: safeHttpUrl(item.source),
+    prompt_log: safeHttpUrl(item.prompt_log),
+    replaces: typeof item.replaces === "string" ? item.replaces : null,
     trust,
     trust_summary: trustSummary(trust),
     reader_url: publicReaderUrl(seed)
@@ -101,8 +102,8 @@ export async function buildArtifacts({ now = DEFAULT_NOW, fetchImpl = fetch, see
     }
 
     const author = feed?.author || {};
-    const apps = validation.ok
-      ? (feed.apps || []).map((app, index) => summarizeApp(seed, feed, app, index, now))
+    const items = validation.ok
+      ? (feed.items || []).map((item, index) => summarizeItem(seed, feed, item, index, now))
       : [];
     const feedTrust = deriveTrustReport({ feed: feed || {}, sourceUrl: seed.feed_url });
     const feedUpdated = toDate(feed?.updated, checkedAt);
@@ -124,18 +125,18 @@ export async function buildArtifacts({ now = DEFAULT_NOW, fetchImpl = fetch, see
         url: safeHttpUrl(author.url),
         social: Array.isArray(author.social) ? author.social : []
       },
-      app_count: apps.length,
+      item_count: items.length,
       trust: feedTrust,
       trust_summary: trustSummary(feedTrust),
-      apps
+      items
     });
 
     if (validation.ok) {
       digestItems.push({
         id: `${seed.id}:feed`,
         type: "feed_added",
-        title: `${author.name || hostFromUrl(seed.feed_url)} joined apps.json`,
-        summary: seed.curator_note || `New apps.json feed with ${apps.length} app${apps.length === 1 ? "" : "s"}.`,
+        title: `${author.name || hostFromUrl(seed.feed_url)} joined made.json`,
+        summary: seed.curator_note || `New made.json feed with ${items.length} item${items.length === 1 ? "" : "s"}.`,
         url: publicReaderUrl(seed),
         external_url: seed.feed_url,
         date: feedUpdated,
@@ -146,20 +147,20 @@ export async function buildArtifacts({ now = DEFAULT_NOW, fetchImpl = fetch, see
         trust_summary: trustSummary(feedTrust)
       });
 
-      for (const app of apps) {
+      for (const item of items) {
         digestItems.push({
-          id: app.id,
-          type: "app_updated",
-          title: app.name,
-          summary: app.description || `Updated app from ${author.name || hostFromUrl(seed.feed_url)}.`,
-          url: app.reader_url,
-          external_url: app.url,
-          date: app.updated,
+          id: item.id,
+          type: "item_updated",
+          title: item.name,
+          summary: item.description || `Updated item from ${author.name || hostFromUrl(seed.feed_url)}.`,
+          url: item.reader_url,
+          external_url: item.url,
+          date: item.updated,
           feed_id: seed.id,
           feed_url: seed.feed_url,
           creator: author.name || hostFromUrl(seed.feed_url),
-          app_id: app.id,
-          trust_summary: app.trust_summary
+          item_id: item.id,
+          trust_summary: item.trust_summary
         });
       }
     }
@@ -176,7 +177,7 @@ export async function buildArtifacts({ now = DEFAULT_NOW, fetchImpl = fetch, see
   const digest = {
     version: "1.0",
     generated_at: now,
-    title: "apps.json weekly digest",
+    title: "made.json weekly digest",
     items: digestItems
   };
 
@@ -189,20 +190,20 @@ export async function buildArtifacts({ now = DEFAULT_NOW, fetchImpl = fetch, see
 }
 
 function hostFromUrl(url) {
-  try { return new URL(url).host; } catch { return "apps.json feed"; }
+  try { return new URL(url).host; } catch { return "made.json feed"; }
 }
 
 function absoluteUrl(url) {
   if (/^https?:\/\//.test(url)) return url;
-  return `https://apps-json.org${url.startsWith("/") ? "" : "/"}${url}`;
+  return `https://made-json.org${url.startsWith("/") ? "" : "/"}${url}`;
 }
 
 export function buildJsonFeed(digest) {
   return {
     version: "https://jsonfeed.org/version/1.1",
     title: digest.title,
-    home_page_url: "https://apps-json.org/digest",
-    feed_url: "https://apps-json.org/feed.json",
+    home_page_url: "https://made-json.org/digest",
+    feed_url: "https://made-json.org/feed.json",
     items: digest.items.map(item => ({
       id: item.id,
       url: absoluteUrl(item.url),
@@ -229,8 +230,8 @@ export function buildRss(digest) {
 <rss version="2.0">
   <channel>
     <title>${xml(digest.title)}</title>
-    <link>https://apps-json.org/digest</link>
-    <description>Recent additions and updates from the seeded apps.json network.</description>
+    <link>https://made-json.org/digest</link>
+    <description>Recent additions and updates from the seeded made.json network.</description>
     <lastBuildDate>${new Date(digest.generated_at).toUTCString()}</lastBuildDate>
 ${items}
   </channel>

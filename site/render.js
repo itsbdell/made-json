@@ -1,5 +1,5 @@
 // site/render.js
-// Pure DOM rendering for an apps.json feed. No fetching, no validation
+// Pure DOM rendering for a made.json feed. No fetching, no validation
 // here — call validate(feed) first and pass in the validated feed.
 //
 // Security: every string from the feed is set via textContent, never
@@ -131,12 +131,12 @@ function renderTargetButton(t) {
   return null;
 }
 
-function renderTargets(app) {
-  const targets = Array.isArray(app.targets) ? app.targets : [];
+function renderTargets(item) {
+  const targets = Array.isArray(item.targets) ? item.targets : [];
   const buttons = targets.map(renderTargetButton).filter(Boolean);
   if (buttons.length === 0) {
     // Fallback to top-level url as the only target
-    const safe = safeWebUrl(app.url);
+    const safe = safeWebUrl(item.url);
     if (safe) {
       return renderFactGroup("Targets", "target-group", el("div", { class: "target-row" },
         el("a", { class: "target-btn target-web", href: safe, target: "_blank", rel: "noopener" },
@@ -150,24 +150,24 @@ function renderTargets(app) {
   return renderFactGroup("Targets", "target-group", el("div", { class: "target-row" }, ...buttons));
 }
 
-function renderProvenance(app) {
+function renderProvenance(item) {
   const bits = [];
-  if (app.vibe_coded === true) bits.push(el("span", { class: "chip claim-chip chip-vibe", text: "vibe-coded" }));
-  if (app.forkable === true) bits.push(el("span", { class: "chip claim-chip chip-fork", text: "forkable" }));
-  if (safeWebUrl(app.prompt_log)) {
-    bits.push(el("a", { class: "chip claim-chip", href: app.prompt_log, target: "_blank", rel: "noopener", text: "prompt log" }));
+  if (item.vibe_coded === true) bits.push(el("span", { class: "chip claim-chip chip-vibe", text: "vibe-coded" }));
+  if (item.forkable === true) bits.push(el("span", { class: "chip claim-chip chip-fork", text: "forkable" }));
+  if (safeWebUrl(item.prompt_log)) {
+    bits.push(el("a", { class: "chip claim-chip", href: item.prompt_log, target: "_blank", rel: "noopener", text: "prompt log" }));
   }
-  if (safeWebUrl(app.source)) {
-    bits.push(el("a", { class: "chip claim-chip", href: app.source, target: "_blank", rel: "noopener", text: "source" }));
+  if (safeWebUrl(item.source)) {
+    bits.push(el("a", { class: "chip claim-chip", href: item.source, target: "_blank", rel: "noopener", text: "source" }));
   }
-  if (safeWebUrl(app.replaces)) {
+  if (safeWebUrl(item.replaces)) {
     bits.push(el("span", { class: "chip claim-chip" },
       "replaces ",
-      el("a", { href: app.replaces, target: "_blank", rel: "noopener", text: hostFromUrl(app.replaces) || "upstream" })
+      el("a", { href: item.replaces, target: "_blank", rel: "noopener", text: hostFromUrl(item.replaces) || "upstream" })
     ));
-  } else if (typeof app.replaces === "string" && app.replaces.startsWith("app://")) {
+  } else if (typeof item.replaces === "string" && item.replaces.startsWith("app://")) {
     // app:// URI form — render as plain text
-    bits.push(el("span", { class: "chip claim-chip", text: `replaces ${app.replaces}` }));
+    bits.push(el("span", { class: "chip claim-chip", text: `replaces ${item.replaces}` }));
   }
   if (bits.length === 0) return null;
   return renderFactGroup("Creator claims", "claim-group", el("div", { class: "prov-row" }, ...bits));
@@ -181,12 +181,12 @@ function renderFactGroup(label, className, content) {
   );
 }
 
-function renderApp(app, feed = null) {
-  if (!app || typeof app !== "object") return null;
-  const name = typeof app.name === "string" ? app.name : "(unnamed)";
-  const description = typeof app.description === "string" ? app.description : null;
-  const version = typeof app.version === "string" ? app.version : null;
-  const updated = typeof app.updated === "string" ? app.updated : null;
+function renderItem(item, feed = null) {
+  if (!item || typeof item !== "object") return null;
+  const name = typeof item.name === "string" ? item.name : "(unnamed)";
+  const description = typeof item.description === "string" ? item.description : null;
+  const version = typeof item.version === "string" ? item.version : null;
+  const updated = typeof item.updated === "string" ? item.updated : null;
 
   return el("article", { class: "app-card" },
     el("header", { class: "app-head" },
@@ -199,26 +199,26 @@ function renderApp(app, feed = null) {
         : null
     ),
     description ? el("p", { class: "app-desc", text: description }) : null,
-    renderTags(app.tags),
-    renderTargets(app),
-    renderProvenance(app),
-    renderTrustReport(app.trust || deriveTrustReport({ feed: feed || {}, app }))
+    renderTags(item.tags),
+    renderTargets(item),
+    renderProvenance(item),
+    renderTrustReport(item.trust || deriveTrustReport({ feed: feed || {}, item }))
   );
 }
 
 export function renderProfile(feed, { sourceUrl } = {}) {
   const root = el("div", { class: "profile" });
   root.append(renderAuthor(feed.author) || el("section", { class: "author-block" },
-    el("h1", { text: hostFromUrl(sourceUrl) || "apps.json feed" })
+    el("h1", { text: hostFromUrl(sourceUrl) || "made.json feed" })
   ));
 
-  const apps = Array.isArray(feed.apps) ? feed.apps : [];
-  if (apps.length === 0) {
+  const items = Array.isArray(feed.items) ? feed.items : [];
+  if (items.length === 0) {
     root.append(el("p", { class: "empty", text: "(empty feed)" }));
   } else {
     const list = el("div", { class: "app-list" });
-    for (const app of apps) {
-      const card = renderApp(app, feed);
+    for (const item of items) {
+      const card = renderItem(item, feed);
       if (card) list.append(card);
     }
     root.append(list);

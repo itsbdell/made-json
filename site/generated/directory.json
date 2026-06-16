@@ -5,10 +5,10 @@
   "feeds": [
     {
       "id": "ada-example",
-      "feed_url": "https://ada.example/apps.json",
+      "feed_url": "https://ada.example/made.json",
       "demo": true,
       "permission": "fictional-example",
-      "curator_note": "Fictional demo feed used to show the apps.json directory and digest surfaces.",
+      "curator_note": "Fictional demo feed used to show the made.json directory and digest surfaces.",
       "curator_tags": [
         "demo",
         "ai",
@@ -39,7 +39,7 @@
           }
         ]
       },
-      "app_count": 3,
+      "item_count": 3,
       "trust": {
         "summary": {
           "present": 4,
@@ -54,8 +54,8 @@
           {
             "label": "feed",
             "state": "present",
-            "value": "https://ada.example/apps.json",
-            "url": "https://ada.example/apps.json",
+            "value": "https://ada.example/made.json",
+            "url": "https://ada.example/made.json",
             "urlState": "valid"
           },
           {
@@ -101,12 +101,13 @@
         ]
       },
       "trust_summary": "claims present",
-      "apps": [
+      "items": [
         {
           "id": "ada-example:notebook",
           "feed_id": "ada-example",
-          "feed_url": "https://ada.example/apps.json",
+          "feed_url": "https://ada.example/made.json",
           "name": "Notebook",
+          "kind": "app",
           "description": "A web-based notebook for jotting and threading ideas.",
           "url": "https://notebook.ada.example",
           "version": "0.4.2",
@@ -142,8 +143,8 @@
               {
                 "label": "feed",
                 "state": "present",
-                "value": "https://ada.example/apps.json",
-                "url": "https://ada.example/apps.json",
+                "value": "https://ada.example/made.json",
+                "url": "https://ada.example/made.json",
                 "urlState": "valid"
               },
               {
@@ -202,8 +203,9 @@
         {
           "id": "ada-example:outreach",
           "feed_id": "ada-example",
-          "feed_url": "https://ada.example/apps.json",
+          "feed_url": "https://ada.example/made.json",
           "name": "Outreach",
+          "kind": "skill",
           "description": "Topic-driven networking pipeline as a Claude skill.",
           "url": "https://ada.example/skills/outreach",
           "version": null,
@@ -235,8 +237,8 @@
               {
                 "label": "feed",
                 "state": "present",
-                "value": "https://ada.example/apps.json",
-                "url": "https://ada.example/apps.json",
+                "value": "https://ada.example/made.json",
+                "url": "https://ada.example/made.json",
                 "urlState": "valid"
               },
               {
@@ -287,8 +289,9 @@
         {
           "id": "ada-example:phrase-chain-fork",
           "feed_id": "ada-example",
-          "feed_url": "https://ada.example/apps.json",
-          "name": "Phrase Chain — Spanish edition",
+          "feed_url": "https://ada.example/made.json",
+          "name": "Phrase Chain Spanish edition",
+          "kind": "tool",
           "description": "Fork of phrase-chain retrained on Spanish corpora.",
           "url": "https://ada.example/phrase-chain-es",
           "version": null,
@@ -314,8 +317,8 @@
               {
                 "label": "feed",
                 "state": "present",
-                "value": "https://ada.example/apps.json",
-                "url": "https://ada.example/apps.json",
+                "value": "https://ada.example/made.json",
+                "url": "https://ada.example/made.json",
                 "urlState": "valid"
               },
               {

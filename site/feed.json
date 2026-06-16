@@ -1,16 +1,16 @@
 {
   "version": "https://jsonfeed.org/version/1.1",
-  "title": "apps.json weekly digest",
-  "home_page_url": "https://apps-json.org/digest",
-  "feed_url": "https://apps-json.org/feed.json",
+  "title": "made.json weekly digest",
+  "home_page_url": "https://made-json.org/digest",
+  "feed_url": "https://made-json.org/feed.json",
   "items": [
     {
       "id": "ada-example:feed",
-      "url": "https://apps-json.org/?feed=%2Fapps.example.json",
-      "external_url": "https://ada.example/apps.json",
-      "title": "Ada Lovelace joined apps.json",
-      "summary": "Fictional demo feed used to show the apps.json directory and digest surfaces.",
-      "content_text": "Fictional demo feed used to show the apps.json directory and digest surfaces.",
+      "url": "https://made-json.org/?feed=%2Fapps.example.json",
+      "external_url": "https://ada.example/made.json",
+      "title": "Ada Lovelace joined made.json",
+      "summary": "Fictional demo feed used to show the made.json directory and digest surfaces.",
+      "content_text": "Fictional demo feed used to show the made.json directory and digest surfaces.",
       "date_modified": "2026-04-30T12:00:00.000Z",
       "tags": [
         "feed_added",
@@ -19,40 +19,40 @@
     },
     {
       "id": "ada-example:outreach",
-      "url": "https://apps-json.org/?feed=%2Fapps.example.json",
+      "url": "https://made-json.org/?feed=%2Fapps.example.json",
       "external_url": "https://ada.example/skills/outreach",
       "title": "Outreach",
       "summary": "Topic-driven networking pipeline as a Claude skill.",
       "content_text": "Topic-driven networking pipeline as a Claude skill.",
       "date_modified": "2026-04-30T12:00:00.000Z",
       "tags": [
-        "app_updated",
+        "item_updated",
         "claims present"
       ]
     },
     {
       "id": "ada-example:phrase-chain-fork",
-      "url": "https://apps-json.org/?feed=%2Fapps.example.json",
+      "url": "https://made-json.org/?feed=%2Fapps.example.json",
       "external_url": "https://ada.example/phrase-chain-es",
-      "title": "Phrase Chain — Spanish edition",
+      "title": "Phrase Chain Spanish edition",
       "summary": "Fork of phrase-chain retrained on Spanish corpora.",
       "content_text": "Fork of phrase-chain retrained on Spanish corpora.",
       "date_modified": "2026-04-30T12:00:00.000Z",
       "tags": [
-        "app_updated",
+        "item_updated",
         "claims present"
       ]
     },
     {
       "id": "ada-example:notebook",
-      "url": "https://apps-json.org/?feed=%2Fapps.example.json",
+      "url": "https://made-json.org/?feed=%2Fapps.example.json",
       "external_url": "https://notebook.ada.example/",
       "title": "Notebook",
       "summary": "A web-based notebook for jotting and threading ideas.",
       "content_text": "A web-based notebook for jotting and threading ideas.",
       "date_modified": "2026-04-22T09:14:00.000Z",
       "tags": [
-        "app_updated",
+        "item_updated",
         "claims present"
       ]
     }

@@ -4,11 +4,11 @@
   "feeds": [
     {
       "id": "ada-example",
-      "feed_url": "https://ada.example/apps.json",
+      "feed_url": "https://ada.example/made.json",
       "fixture": "site/apps.example.json",
       "demo": true,
       "permission": "fictional-example",
-      "curator_note": "Fictional demo feed used to show the apps.json directory and digest surfaces.",
+      "curator_note": "Fictional demo feed used to show the made.json directory and digest surfaces.",
       "tags": ["demo", "ai", "tools"]
     }
   ]

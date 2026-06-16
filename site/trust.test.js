@@ -4,14 +4,14 @@ import { deriveTrustReport, safeHttpUrl, safeLocalOrHttpUrl, trustSummary } from
 
 test("derives claim and URL states without central approval", () => {
   const report = deriveTrustReport({
-    sourceUrl: "https://ada.example/apps.json",
+    sourceUrl: "https://ada.example/made.json",
     feed: {
       author: {
         url: "https://ada.example",
         social: [{ platform: "github", url: "https://github.com/ada-example" }]
       }
     },
-    app: {
+    item: {
       source: "https://github.com/ada-example/notebook",
       prompt_log: "not-a-url",
       replaces: "app://upstream.example/phrase-chain",
@@ -33,8 +33,8 @@ test("blocks unsafe web URLs", () => {
 });
 
 test("allows internal reader links without allowing protocol-relative URLs", () => {
-  assert.equal(safeLocalOrHttpUrl("/?feed=https%3A%2F%2Fexample.com%2Fapps.json"), "/?feed=https%3A%2F%2Fexample.com%2Fapps.json");
-  assert.equal(safeLocalOrHttpUrl("//evil.example/apps.json"), null);
+  assert.equal(safeLocalOrHttpUrl("/?feed=https%3A%2F%2Fexample.com%2Fmade.json"), "/?feed=https%3A%2F%2Fexample.com%2Fmade.json");
+  assert.equal(safeLocalOrHttpUrl("//evil.example/made.json"), null);
   assert.equal(safeLocalOrHttpUrl("javascript:alert(1)"), null);
 });
 

@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
   <channel>
-    <title>apps.json weekly digest</title>
-    <link>https://apps-json.org/digest</link>
-    <description>Recent additions and updates from the seeded apps.json network.</description>
+    <title>made.json weekly digest</title>
+    <link>https://made-json.org/digest</link>
+    <description>Recent additions and updates from the seeded made.json network.</description>
     <lastBuildDate>Sat, 02 May 2026 00:00:00 GMT</lastBuildDate>
     <item>
-      <title>Ada Lovelace joined apps.json</title>
-      <link>https://apps-json.org/?feed=%2Fapps.example.json</link>
+      <title>Ada Lovelace joined made.json</title>
+      <link>https://made-json.org/?feed=%2Fapps.example.json</link>
       <guid isPermaLink="false">ada-example:feed</guid>
-      <description>Fictional demo feed used to show the apps.json directory and digest surfaces.</description>
+      <description>Fictional demo feed used to show the made.json directory and digest surfaces.</description>
       <pubDate>Thu, 30 Apr 2026 12:00:00 GMT</pubDate>
     </item>
     <item>
       <title>Outreach</title>
-      <link>https://apps-json.org/?feed=%2Fapps.example.json</link>
+      <link>https://made-json.org/?feed=%2Fapps.example.json</link>
       <guid isPermaLink="false">ada-example:outreach</guid>
       <description>Topic-driven networking pipeline as a Claude skill.</description>
       <pubDate>Thu, 30 Apr 2026 12:00:00 GMT</pubDate>
     </item>
     <item>
-      <title>Phrase Chain — Spanish edition</title>
-      <link>https://apps-json.org/?feed=%2Fapps.example.json</link>
+      <title>Phrase Chain Spanish edition</title>
+      <link>https://made-json.org/?feed=%2Fapps.example.json</link>
       <guid isPermaLink="false">ada-example:phrase-chain-fork</guid>
       <description>Fork of phrase-chain retrained on Spanish corpora.</description>
       <pubDate>Thu, 30 Apr 2026 12:00:00 GMT</pubDate>
     </item>
     <item>
       <title>Notebook</title>
-      <link>https://apps-json.org/?feed=%2Fapps.example.json</link>
+      <link>https://made-json.org/?feed=%2Fapps.example.json</link>
       <guid isPermaLink="false">ada-example:notebook</guid>
       <description>A web-based notebook for jotting and threading ideas.</description>
       <pubDate>Wed, 22 Apr 2026 09:14:00 GMT</pubDate>

@@ -6,7 +6,7 @@ import { safeHttpUrl, safeLocalOrHttpUrl } from "./trust.js?v=20260502-8";
 export function groupDigestItems(items = []) {
   return {
     feeds: items.filter(item => item.type === "feed_added"),
-    apps: items.filter(item => item.type !== "feed_added")
+    items: items.filter(item => item.type !== "feed_added")
   };
 }
 
@@ -30,9 +30,9 @@ export async function bootDigest() {
 function renderDigest(digest) {
   const groups = groupDigestItems(digest.items || []);
   const wrap = el("div", { class: "digest" },
-    el("p", { class: "muted", text: `Generated ${String(digest.generated_at || "").slice(0, 10)} from the seeded apps.json network.` }),
+    el("p", { class: "muted", text: `Generated ${String(digest.generated_at || "").slice(0, 10)} from the seeded made.json network.` }),
     renderGroup("New feeds", groups.feeds),
-    renderGroup("App updates", groups.apps)
+    renderGroup("Item updates", groups.items)
   );
   return wrap;
 }
@@ -53,11 +53,11 @@ function renderDigestItem(item) {
   const targets = [
     readerUrl ? el("a", { class: "target-btn", href: readerUrl },
       el("span", { class: "target-label", text: "Open in reader" }),
-      el("span", { class: "target-kind", text: "apps.json" })
+      el("span", { class: "target-kind", text: "made.json" })
     ) : null,
     externalUrl ? el("a", { class: "target-btn target-web", href: externalUrl, target: "_blank", rel: "noopener" },
       el("span", { class: "target-label", text: "Open source" }),
-      el("span", { class: "target-kind", text: item.type === "feed_added" ? "feed" : "app" })
+      el("span", { class: "target-kind", text: item.type === "feed_added" ? "feed" : "item" })
     ) : null
   ].filter(Boolean);
 

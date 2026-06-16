@@ -47,43 +47,44 @@ async function readFeed(path) {
   try {
     return JSON.parse(await readFile(path, "utf8"));
   } catch (error) {
-    if (error?.code === "ENOENT") return { version: "1.0", apps: [] };
+    if (error?.code === "ENOENT") return { version: "1.0", items: [] };
     throw new Error(`Could not read ${path}: ${error.message}`);
   }
 }
 
-function buildApp(options) {
+function buildItem(options) {
   if (!options.name || !options.url) {
     const error = new Error("appfeed add requires --name and --url");
     error.code = EXIT_USAGE;
     throw error;
   }
 
-  const app = {
+  const item = {
     id: options.id || slugify(options.name),
     name: options.name,
     url: options.url,
     updated: options.updated || new Date().toISOString()
   };
 
-  if (options.description) app.description = options.description;
+  if (options.kind) item.kind = options.kind;
+  if (options.description) item.description = options.description;
   const tags = splitList(options.tags);
-  if (tags.length) app.tags = tags;
+  if (tags.length) item.tags = tags;
 
   const target = targetFromOption(options.target);
-  if (target) app.targets = [target];
+  if (target) item.targets = [target];
 
   const vibeCoded = boolOption(options.vibeCoded);
-  if (vibeCoded !== undefined) app.vibe_coded = vibeCoded;
+  if (vibeCoded !== undefined) item.vibe_coded = vibeCoded;
 
   const forkable = boolOption(options.forkable);
-  if (forkable !== undefined) app.forkable = forkable;
+  if (forkable !== undefined) item.forkable = forkable;
 
-  if (options.source) app.source = options.source;
-  if (options.promptLog) app.prompt_log = options.promptLog;
-  if (options.replaces) app.replaces = options.replaces;
+  if (options.source) item.source = options.source;
+  if (options.promptLog) item.prompt_log = options.promptLog;
+  if (options.replaces) item.replaces = options.replaces;
 
-  return app;
+  return item;
 }
 
 export async function addCmd(path, options = {}) {
@@ -95,31 +96,31 @@ export async function addCmd(path, options = {}) {
     return 2;
   }
 
-  if (!Array.isArray(feed.apps)) feed.apps = [];
+  if (!Array.isArray(feed.items)) feed.items = [];
   if (!feed.version) feed.version = "1.0";
   feed.updated = options.feedUpdated || new Date().toISOString();
 
-  let app;
+  let item;
   try {
-    app = buildApp(options);
+    item = buildItem(options);
   } catch (error) {
     console.error(pc.red(`✖ ${error.message}`));
     return error.code || 2;
   }
 
-  const existingIndex = feed.apps.findIndex(item =>
-    (app.id && item?.id === app.id) || item?.url === app.url
+  const existingIndex = feed.items.findIndex(existing =>
+    (item.id && existing?.id === item.id) || existing?.url === item.url
   );
 
   if (existingIndex >= 0 && !options.replace) {
-    console.error(pc.red(`✖ app already exists (${feed.apps[existingIndex].id || feed.apps[existingIndex].url}); pass --replace to update it`));
+    console.error(pc.red(`✖ item already exists (${feed.items[existingIndex].id || feed.items[existingIndex].url}); pass --replace to update it`));
     return EXIT_USAGE;
   }
 
-  if (existingIndex >= 0) feed.apps[existingIndex] = { ...feed.apps[existingIndex], ...app };
-  else feed.apps.push(app);
+  if (existingIndex >= 0) feed.items[existingIndex] = { ...feed.items[existingIndex], ...item };
+  else feed.items.push(item);
 
   await writeFile(path, JSON.stringify(feed, null, 2) + "\n");
-  console.log(pc.green(`${existingIndex >= 0 ? "Updated" : "Added"} ${app.name} in ${path}`));
+  console.log(pc.green(`${existingIndex >= 0 ? "Updated" : "Added"} ${item.name} in ${path}`));
   return validateCmd(path, { json: false });
 }

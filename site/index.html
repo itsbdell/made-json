@@ -3,51 +3,51 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>apps.json — a decentralized standard for app feeds</title>
-  <meta name="description" content="A tiny JSON file for publishing, discovering, and syndicating independent apps across the open web." />
+  <title>made.json — an open standard for made things</title>
+  <meta name="description" content="A tiny JSON file for publishing, discovering, and syndicating apps, skills, tools, prompts, workflows, and agents across the open web." />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="stylesheet" href="/styles.css?v=20260502-8" />
-  <meta property="og:title" content="apps.json" />
-  <meta property="og:description" content="A decentralized standard for publishing apps. RSS for vibe-coded micro-apps." />
+  <meta property="og:title" content="made.json" />
+  <meta property="og:description" content="A decentralized standard for publishing made things. RSS for apps, skills, tools, prompts, workflows, and agents." />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://apps-json.org/" />
-  <link rel="canonical" href="https://apps-json.org/" />
+  <meta property="og:url" content="https://made-json.org/" />
+  <link rel="canonical" href="https://made-json.org/" />
 </head>
 <body>
   <nav class="site-nav">
-    <a href="/" class="site-brand"><strong>apps.json</strong></a>
+    <a href="/" class="site-brand"><strong>made.json</strong></a>
     <span class="site-nav-sep">·</span>
     <a href="/spec">spec</a>
     <span class="site-nav-sep">·</span>
     <a href="#tools">tools</a>
     <span class="site-nav-sep">·</span>
-    <a href="https://github.com/itsbdell/apps-json">github</a>
+    <a href="https://github.com/itsbdell/made-json">github</a>
   </nav>
 
   <main id="directory-mode">
     <header>
-      <h1>apps.json</h1>
-      <p class="muted">A small file for publishing the apps you make. Put it at <code>yourdomain.com/apps.json</code>, list your apps, and people can discover, follow, render, install, and fork them from anywhere.</p>
+      <h1>made.json</h1>
+      <p class="muted">A small file for publishing the things you make. Put it at <code>yourdomain.com/made.json</code>, list your apps, skills, tools, prompts, workflows, and agents, and people can discover, follow, render, install, and fork them from anywhere.</p>
     </header>
 
     <hr class="rule" />
 
     <section id="about">
       <h2>Why this exists</h2>
-      <p>More people are making small, personal software: tools, experiments, Claude skills, prototypes, tiny utilities, and apps that do one useful thing.</p>
-      <p>But there is no simple way to follow someone's apps as a set. They are scattered across GitHub repos, launch posts, personal sites, app stores, Discord links, and half-forgotten demos.</p>
-      <p><code>apps.json</code> gives those apps a home on the open web. It is RSS-ish: publish one plain file, and any reader, crawler, launcher, directory, or search engine can understand it.</p>
+      <p>More people are making small, personal software: tools, experiments, Claude skills, prototypes, prompts, workflows, tiny utilities, and apps that do one useful thing.</p>
+      <p>But there is no simple way to follow what someone makes as a set. These artifacts are scattered across GitHub repos, launch posts, personal sites, app stores, plugin directories, Discord links, and half-forgotten demos.</p>
+      <p><code>made.json</code> gives those made things a home on the open web. It is RSS-ish: publish one plain file, and any reader, crawler, launcher, directory, or agent can understand it.</p>
     </section>
 
     <section>
       <h2>How it works</h2>
       <p>Create a file at:</p>
-      <p class="mono"><code>https://yourdomain.com/apps.json</code></p>
+      <p class="mono"><code>https://yourdomain.com/made.json</code></p>
       <p>Start small:</p>
       <pre class="mono"><code>{
   "version": "1.0",
-  "apps": [
-    { "name": "My Cool App", "url": "https://example.com/cool" }
+  "items": [
+    { "name": "My Cool Tool", "kind": "tool", "url": "https://example.com/cool" }
   ]
 }</code></pre>
       <p class="muted">That is enough.</p>
@@ -55,10 +55,11 @@
 
     <section>
       <h2>Add claims when they help</h2>
-      <p>Apps are different from posts. People want to know where an app runs, whether it is current, whether the source is available, whether it was vibe-coded, and whether it can be forked.</p>
-      <p><code>apps.json</code> handles that with optional creator claims:</p>
+      <p>Made things are different from posts. People want to know where something runs, whether it is current, whether the source is available, whether it was AI-assisted, and whether it can be forked.</p>
+      <p><code>made.json</code> handles that with optional creator claims:</p>
       <pre class="mono"><code>{
   "name": "My Cool App",
+  "kind": "app",
   "url": "https://example.com/cool",
   "version": "1.2.0",
   "tags": ["writing", "utility"],
@@ -70,16 +71,16 @@
     { "kind": "web", "url": "https://example.com/cool", "label": "Open" }
   ]
 }</code></pre>
-      <p class="muted">These are not certifications from <code>apps.json</code>. They are useful facts declared by the creator. Readers can show them, search over them, and build trust layers on top later.</p>
+      <p class="muted">These are not certifications from <code>made.json</code>. They are useful facts declared by the creator. Readers can show them, search over them, and build trust layers on top later.</p>
     </section>
 
     <section id="principles">
       <h2>Principles</h2>
       <ul class="principles-list">
-        <li><strong>Publish to participate.</strong> A public <code>apps.json</code> file is the opt-in.</li>
+        <li><strong>Publish to participate.</strong> A public <code>made.json</code> file is the opt-in.</li>
         <li><strong>No central registry.</strong> Directories and readers can exist, but the standard is just the file.</li>
-        <li><strong>Tiny required surface.</strong> Only <code>version</code>, <code>apps</code>, <code>name</code>, and <code>url</code> are required.</li>
-        <li><strong>Useful app context.</strong> Apps need a little more metadata than posts: where to run them, what version they are, where the source lives, and whether they can be forked.</li>
+        <li><strong>Tiny required surface.</strong> Only <code>version</code>, <code>items</code>, <code>name</code>, and <code>url</code> are required.</li>
+        <li><strong>Useful software context.</strong> Made things need a little more metadata than posts: where to run them, what version they are, where the source lives, and whether they can be forked.</li>
         <li><strong>Claims, not certification.</strong> Creator fields are creator claims. Readers can show them; trust layers can come later.</li>
         <li><strong>For builders and audiences.</strong> Builders get a canonical list. Audiences get a way to follow and discover what people are making.</li>
       </ul>
@@ -92,19 +93,19 @@
         <li><strong>Reader.</strong> Paste a feed URL into <a href="#try">the reader</a> to render and validate it.</li>
         <li><strong>Badge.</strong> Use the <a href="/badge.html">badge generator</a> to link your site or README back to your feed.</li>
         <li><strong>Digest.</strong> Follow the example <a href="/digest.html">digest</a>, <a href="/feed.json">JSON Feed</a>, or <a href="/feed.xml">RSS feed</a> for seeded updates.</li>
-        <li><strong>Set up a feed from your repos.</strong> <a href="https://github.com/itsbdell/apps-json-agent-skills/tree/main/skills/apps-json-setup"><code>apps-json-setup</code></a> scans local repos, finds apps, Claude/Codex skills, CLIs, MCP servers, extensions, templates, and other creator-made software, then drafts entries and flags anything that needs confirmation.</li>
-        <li><strong>Keep a feed current.</strong> <a href="https://github.com/itsbdell/apps-json-agent-skills/tree/main/skills/apps-json-publisher"><code>apps-json-publisher</code></a> adds or updates app entries, preserves creator claims, and validates the feed.</li>
+        <li><strong>Set up a feed from your repos.</strong> <a href="https://github.com/itsbdell/made-json-agent-skills/tree/main/skills/made-json-setup"><code>made-json-setup</code></a> scans local repos, finds apps, Claude/Codex skills, CLIs, MCP servers, extensions, templates, and other creator-made software, then drafts entries and flags anything that needs confirmation.</li>
+        <li><strong>Keep a feed current.</strong> <a href="https://github.com/itsbdell/made-json-agent-skills/tree/main/skills/made-json-publisher"><code>made-json-publisher</code></a> adds or updates made items, preserves creator claims, and validates the feed.</li>
       </ul>
-      <p class="muted">They are examples and helper workflows, not required infrastructure. The standard is still just the <code>apps.json</code> file.</p>
+      <p class="muted">They are examples and helper workflows, not required infrastructure. The standard is still just the <code>made.json</code> file.</p>
     </section>
 
     <section id="try">
       <h2>Try it</h2>
       <p>Append your feed URL as a query string:</p>
-      <p class="mono"><code>https://apps-json.org/?feed=https://yourdomain.com/apps.json</code></p>
+      <p class="mono"><code>https://made-json.org/?feed=https://yourdomain.com/made.json</code></p>
       <form id="try-form" class="try-form" method="get" action="/">
         <label for="try-input" class="muted">Feed URL:</label>
-        <input id="try-input" name="feed" type="url" placeholder="https://yourdomain.com/apps.json" />
+        <input id="try-input" name="feed" type="url" placeholder="https://yourdomain.com/made.json" />
         <button type="submit">Render</button>
       </form>
     </section>
@@ -113,11 +114,11 @@
       <h2>Status</h2>
       <p>Spec is <strong>v1.0 (draft)</strong>. The reader, badge, seeded directory, and digest are example tools built around the format. They are not required infrastructure, and they are not a platform.</p>
       <ul>
-        <li>Read the spec: <a href="https://github.com/itsbdell/apps-json/blob/main/spec/SPEC.md">spec/SPEC.md</a></li>
+        <li>Read the spec: <a href="https://github.com/itsbdell/made-json/blob/main/spec/SPEC.md">spec/SPEC.md</a></li>
         <li>Validator CLI: <code>npx @apps-json/cli validate &lt;url&gt;</code></li>
-        <li>Project feed: <a href="/apps.json"><code>apps-json.org/apps.json</code></a></li>
+        <li>Project feed: <a href="/made.json"><code>made-json.org/made.json</code></a></li>
         <li>Tools: <a href="/badge.html">badge</a> · <a href="/digest.html">digest</a> · <a href="/feed.json">JSON Feed</a> · <a href="/feed.xml">RSS</a></li>
-        <li>Source: <a href="https://github.com/itsbdell/apps-json">github.com/itsbdell/apps-json</a></li>
+        <li>Source: <a href="https://github.com/itsbdell/made-json">github.com/itsbdell/made-json</a></li>
       </ul>
     </section>
 
@@ -129,7 +130,7 @@
   <main id="reader-output" hidden></main>
 
   <footer>
-    <p><code>apps.json</code> v1.0 &middot; published from <code>github.com/itsbdell/apps-json</code> &middot; rendered by Vercel.</p>
+    <p><code>made.json</code> v1.0 &middot; published from <code>github.com/itsbdell/made-json</code> &middot; rendered by Vercel.</p>
   </footer>
 
   <script type="module" src="/reader.js?v=20260502-8"></script>

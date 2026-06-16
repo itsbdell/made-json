@@ -1,1 +1,1 @@
-{"version":"1.0","custom_field":"should be allowed","apps":[{"name":"X","url":"https://example.com","x-foo":42}]}
+{"version":"1.0","custom_field":"should be allowed","items":[{"name":"X","url":"https://example.com","x-foo":42}]}

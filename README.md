@@ -1,33 +1,36 @@
-# apps.json
+# made.json
 
-`apps.json` is a small file for publishing the apps you make.
+`made.json` is a small file for publishing the things you make: apps, skills,
+tools, prompts, workflows, agents, templates, CLIs, MCP servers, and other
+useful software-shaped artifacts.
 
-Home: [apps-json.org](https://apps-json.org)
+Home: [made-json.org](https://made-json.org)
 
-Put it at `https://yourdomain.com/apps.json`, list your apps, and people can
-discover, follow, render, install, and fork them from anywhere.
+Put it at `https://yourdomain.com/made.json`, list what you have made, and
+people can discover, follow, render, install, and fork it from anywhere.
 
 It is RSS-ish: publish one plain file, and any reader, crawler, launcher,
-directory, or search engine can understand it.
+directory, search engine, or agent can understand it.
 
 ## Why this exists
 
-More people are making small, personal software: tools, experiments, Claude
-skills, prototypes, tiny utilities, and apps that do one useful thing.
+More people are making small, personal software: tools, experiments, Claude and
+Codex skills, prototypes, prompts, workflows, tiny utilities, and apps that do
+one useful thing.
 
-But there is no simple way to follow someone's apps as a set. They are
-scattered across GitHub repos, launch posts, personal sites, app stores,
-Discord links, and half-forgotten demos.
+But there is no simple way to follow what someone makes as a set. These
+artifacts are scattered across GitHub repos, launch posts, personal sites, app
+stores, plugin directories, Discord links, and half-forgotten demos.
 
-`apps.json` gives those apps a home on the open web. No central registry, no
-submission form, no platform account required.
+`made.json` gives those made things a home on the open web. No central registry,
+no submission form, no platform account required.
 
 ## Start small
 
 Create a file at:
 
 ```text
-https://yourdomain.com/apps.json
+https://yourdomain.com/made.json
 ```
 
 Then add the smallest useful feed:
@@ -35,26 +38,27 @@ Then add the smallest useful feed:
 ```json
 {
   "version": "1.0",
-  "apps": [
-    { "name": "My Cool App", "url": "https://example.com/cool" }
+  "items": [
+    { "name": "My Cool Tool", "kind": "tool", "url": "https://example.com/cool" }
   ]
 }
 ```
 
-That is enough. Only `version`, `apps`, and per-app `name` + `url` are
-required.
+That is enough. Only `version`, `items`, and per-item `name` + `url` are
+required. `kind` is optional, but useful.
 
 ## Add claims when they help
 
-Apps are different from posts. People want to know where an app runs, whether
-it is current, whether the source is available, whether it was vibe-coded, and
-whether it can be forked.
+Made things are different from posts. People want to know where something runs,
+whether it is current, whether the source is available, whether it was
+AI-assisted, and whether it can be forked.
 
-`apps.json` handles that with optional creator claims:
+`made.json` handles that with optional creator claims:
 
 ```json
 {
   "name": "My Cool App",
+  "kind": "app",
   "url": "https://example.com/cool",
   "version": "1.2.0",
   "tags": ["writing", "utility"],
@@ -68,20 +72,20 @@ whether it can be forked.
 }
 ```
 
-These are not certifications from `apps.json`. They are useful facts declared
+These are not certifications from `made.json`. They are useful facts declared
 by the creator. Readers can show them, search over them, and build trust layers
 on top later.
 
 ## Principles
 
-- **Publish to participate.** A public `apps.json` file is the opt-in.
+- **Publish to participate.** A public `made.json` file is the opt-in.
 - **No central registry.** Directories and readers can exist, but the standard
   is just the file.
-- **Tiny required surface.** Only `version`, `apps`, `name`, and `url` are
+- **Tiny required surface.** Only `version`, `items`, `name`, and `url` are
   required.
-- **Useful app context.** Apps need a little more metadata than posts: where to
-  run them, what version they are, where the source lives, and whether they can
-  be forked.
+- **Useful software context.** Made things need a little more metadata than
+  posts: where to run them, what version they are, where the source lives, and
+  whether they can be forked.
 - **Claims, not certification.** Creator fields are creator claims. Readers can
   show them; trust layers can come later.
 - **For builders and audiences.** Builders get a canonical list. Audiences get
@@ -92,7 +96,7 @@ on top later.
 This repo includes example tools around the standard: a reference reader, a
 seeded directory, a badge generator, and a digest. They are here to prove the
 format is useful and easy to build on. They are not required infrastructure,
-and they are not the canonical platform for `apps.json`.
+and they are not the canonical platform for `made.json`.
 
 The directory is "what exists"; the digest is "what changed." Both start from
 public feeds in [`site/seeds.json`](site/seeds.json), and publishing a valid
@@ -107,17 +111,17 @@ The seed list does not invent feeds for real creators.
 | [`spec/SPEC.md`](spec/SPEC.md) | Human-readable spec (v1.0). |
 | [`spec/apps.schema.json`](spec/apps.schema.json) | JSON Schema (Draft 2020-12). |
 | [`spec/apps.example.json`](spec/apps.example.json) | A complete example feed. |
-| [`appfeed/`](appfeed/) | Example/reference CLI. Publishes as `@apps-json/cli`. |
+| [`appfeed/`](appfeed/) | Example/reference CLI. Currently publishes as `@apps-json/cli`. |
 | [`site/`](site/) | Example web reader, seeded directory, digest, badge generator, and shared validator. |
 | [`docs/ECOSYSTEM.md`](docs/ECOSYSTEM.md) | Map of readers, discovery, adopters. |
 | [`docs/PUBLISHING.md`](docs/PUBLISHING.md) | How to publish and keep a feed fresh. |
-| [`site/apps.json`](site/apps.json) | This project's own public feed, published at `https://apps-json.org/apps.json`. |
-| [`skills/apps-json-setup/`](skills/apps-json-setup/) | Codex/Claude skill for finding apps, skills, CLIs, MCP servers, and other software across repos, then drafting a feed. |
-| [`skills/apps-json-publisher/`](skills/apps-json-publisher/) | Small Codex/Claude skill for maintaining a feed. |
+| [`site/made.json`](site/made.json) | This project's own public feed, published at `https://made-json.org/made.json`. |
+| [`skills/made-json-setup/`](skills/made-json-setup/) | Mirrored Codex/Claude skill for finding apps, skills, CLIs, MCP servers, and other software across repos, then drafting a feed. |
+| [`skills/made-json-publisher/`](skills/made-json-publisher/) | Mirrored Codex/Claude skill for maintaining a feed. |
 
 The skills are mirrored here for reference. The canonical agent-facing copies
 live in
-[`apps-json-agent-skills`](https://github.com/itsbdell/apps-json-agent-skills),
+[`made-json-agent-skills`](https://github.com/itsbdell/made-json-agent-skills),
 a smaller repo you can point agents at directly.
 
 ## Try It
@@ -126,19 +130,19 @@ a smaller repo you can point agents at directly.
 # try the CLI without installing
 npx @apps-json/cli validate <url-or-path>
 
-# add a new app to a local feed
-npx @apps-json/cli add ./apps.json --name "Tiny Tool" --url "https://example.com/tiny"
+# add a new item to a local feed
+npx @apps-json/cli add ./made.json --name "Tiny Tool" --kind tool --url "https://example.com/tiny"
 
 # try the reader
-open https://apps-json.org/?feed=<url-of-your-apps.json>
+open https://made-json.org/?feed=<url-of-your-made.json>
 ```
 
 For agent-assisted setup or maintenance, point the agent at
-[`apps-json-agent-skills`](https://github.com/itsbdell/apps-json-agent-skills)
-and ask it to use `apps-json-setup` or `apps-json-publisher`.
+[`made-json-agent-skills`](https://github.com/itsbdell/made-json-agent-skills)
+and ask it to use `made-json-setup` or `made-json-publisher`.
 
-Live site: [apps-json.org](https://apps-json.org).
-Project feed: [apps-json.org/apps.json](https://apps-json.org/apps.json).
+Live site: [made-json.org](https://made-json.org).
+Project feed: [made-json.org/made.json](https://made-json.org/made.json).
 
 ## Development
 
